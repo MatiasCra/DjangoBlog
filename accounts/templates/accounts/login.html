@@ -1,0 +1,7 @@
+{% extends 'layout.html' %} {% block content %}
+<h1 class="text-center mb-3">Login</h1>
+<form action="{% url 'Login' %}" method="post" class="my-form col-md-8 mx-auto">
+  {{ form.errors }} {% csrf_token %} {{ form.as_p }}
+  <input type="submit" value="Login" class="btn btn-main w-100" />
+</form>
+{% endblock content %}
