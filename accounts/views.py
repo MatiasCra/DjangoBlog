@@ -12,7 +12,7 @@ from .forms import LoginForm, SignupForm
 def log_in(request):
     if request.method == "GET":
         form = LoginForm()
-        return render(request, "accounts/login.html", {"form": form})
+        return render(request, "accounts/login.html", {"form": form, "page": "Log in"})
     if request.method == "POST":
         form = LoginForm(data=request.POST)
         if form.is_valid():
@@ -37,14 +37,16 @@ def log_in(request):
         return render(
             request,
             "accounts/login.html",
-            {"form": form},
+            {"form": form, "page": "Log in"},
         )
 
 
 def sign_up(request):
     if request.method == "GET":
         form = SignupForm()
-        return render(request, "accounts/signup.html", {"form": form})
+        return render(
+            request, "accounts/signup.html", {"form": form, "page": "Sign up"}
+        )
     if request.method == "POST":
         form = SignupForm(data=request.POST)
         if form.is_valid():
@@ -59,5 +61,5 @@ def sign_up(request):
         return render(
             request,
             "accounts/signup.html",
-            {"form": form},
+            {"form": form, "page": "Sign up"},
         )
