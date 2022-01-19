@@ -36,8 +36,8 @@
     <div class="d-flex flex-column" style="min-height: 100vh">
       <!-- Navigation-->
       <nav class="navbar navbar-expand-lg navbar-dark static-top bg-main">
-        <div class="container">
-          <a class="navbar-brand w-25" href="#">Start</a>
+        <div class="container col-lg-10">
+          <a class="navbar-brand" style="" href="{% url 'Home' %}">Start</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -50,22 +50,13 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div
-            class="collapse navbar-collapse justify-content-end"
+            class="collapse navbar-collapse d-lg-flex flex-lg-row justify-content-lg-between align-items-baseline"
             id="navbarNavDropdown"
           >
-            <ul class="navbar-nav mx-auto">
+            <ul class="navbar-nav w-fit">
               <li class="nav-item">
                 <a
-                  class="nav-link active"
-                  aria-current="page"
-                  href="{% url 'Home' %}"
-                >
-                  Explore
-                </a>
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link active"
+                  class="nav-link {% if page == 'Categories' %} active {% endif %}"
                   aria-current="page"
                   href="{% url 'Categories' %}"
                 >
@@ -74,7 +65,7 @@
               </li>
               <li class="nav-item">
                 <a
-                  class="nav-link active"
+                  class="nav-link {% if page == 'My posts' %} active {% endif %}"
                   aria-current="page"
                   href="{% url 'MyPosts' %}"
                 >
@@ -83,36 +74,47 @@
               </li>
               <li class="nav-item">
                 <a
-                  class="nav-link active"
+                  class="nav-link {% if page == 'Create post' %} active {% endif %}"
                   aria-current="page"
                   href="{% url 'Create' %}"
                 >
                   Create
                 </a>
               </li>
-            </ul>
-            <div class="d-flex justify-content-end" style="width: 35%">
-              {% if not user.is_authenticated %}
-              <div class="nav-item mx-1">
+              {% if user.is_authenticated %}
+              <li class="nav-item">
                 <a
-                class="btn btn-outline-light outline-secondary"
-                href="{% url 'Login' %}"
-                >Log in</a
+                  class="nav-link {% if page == 'My profile' %} active {% endif %}"
+                  aria-current="page"
+                  href="{% url 'Profile' user.id %}"
+                >
+                  Profile
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+            <div class="w-fit">
+              {% if not user.is_authenticated %}
+              <div class="nav-item mx-1 my-auto">
+                <a
+                  class="btn btn-outline-light outline-secondary"
+                  href="{% url 'Login' %}"
+                  >Log in</a
                 >
               </div>
-              <div class="nav-item mx-1">
+              <div class="nav-item mx-1 my-auto">
                 <a
-                class="btn btn-outline-light outline-secondary"
-                href="{% url 'Signup' %}"
-                >Sign up</a
+                  class="btn btn-outline-light outline-secondary"
+                  href="{% url 'Signup' %}"
+                  >Sign up</a
                 >
               </div>
               {% else %}
               <div class="nav-item mx-1">
                 <a
-                class="btn btn-outline-light outline-secondary"
-                href="{% url 'Logout' %}"
-                >Log out</a
+                  class="btn btn-outline-light outline-secondary"
+                  href="{% url 'Logout' %}"
+                  >Log out</a
                 >
               </div>
               {% endif %}
@@ -120,8 +122,8 @@
           </div>
         </div>
       </nav>
-      <div class="py-3 container-fluid flex-grow-1">
-        <div class="col-lg-7 col-md-9 col-sm-11 mx-auto">
+      <div class="pt-2 pb-4 container flex-grow-1">
+        <div class="col-lg-7 col-md-9 col-sm-11 mx-auto p-3">
           {% block content %} {% endblock content %}
         </div>
       </div>
@@ -176,5 +178,6 @@
     <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <script src="{% static 'scripts.js' %}"></script>
   </body>
 </html>

@@ -1,7 +1,26 @@
-from cProfile import label
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+
+
+class ProfileForm(forms.Form):
+    username = forms.CharField(
+        max_length=200,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    email = forms.EmailField(
+        max_length=200,
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )
+    avatar = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={"class": "form-control"}),
+        required=False
+    )
+    bio = forms.CharField(
+        max_length=1000,
+        widget=forms.Textarea(attrs={"class": "form-control"}),
+        required=False
+    )
 
 
 class LoginForm(forms.Form):

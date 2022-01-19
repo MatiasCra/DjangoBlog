@@ -1,0 +1,24 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="row my-3 d-flex flex-row">
+    <div class="col-4 col-lg-3 align-self-center">
+        <img src="{{ profile.avatar.url }}" alt="avatar" class="profile-avatar">
+    </div>
+    <div class="align-self-center d-flex flex-column fit-content h-100">
+        <p class="display-4 h6">{{ profile.user.username }}</p>
+        {% if profile.user.is_staff %}
+            <p class="lead">Administrator</p>
+        {% endif %}
+    </div>
+    {% if profile.user.id == user.id %}
+        <a href="{% url 'EditProfile' user.id %}" class="btn edit-profile ms-auto px-3">Edit</a>
+    {% endif %}
+</div>
+<div class="mt-4 ms-3">
+    <p class="h5 mb-3">Email: <a href="mailto: {{ profile.user.email }}">{{ profile.user.email }}</a></p>
+    {% if profile.bio %}
+        <p>{{ profile.bio }}</p>
+    {% else %}
+        <p>No biography yet.</p>
+    {% endif %}
+</div>
+{% endblock content %}

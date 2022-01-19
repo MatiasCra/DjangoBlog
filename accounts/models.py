@@ -31,6 +31,12 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user}'s profile"
 
+    def set_avatar(self, avatar=default_avatar):
+        if avatar is not None:
+            self.avatar = avatar
+        else:
+            self.avatar = Profile.default_avatar
+
     def avatar_url(user):
         url = None
         try:

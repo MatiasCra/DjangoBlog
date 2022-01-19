@@ -1,10 +1,12 @@
 {% extends 'layout.html' %}
 {% block content %}
     <h1 class="text-center mb-3">{{ action_title }}</h1>
-    <form action="" class="my-form" enctype="multipart/form-data">
+    <form method="post" class="my-form" enctype="multipart/form-data">
+        {{ form.errors }}
         {% csrf_token %}
         {{ form.media }}
         {{ form.as_p }}
+        <input type="hidden" name="user" value="{{ user.id }}" />
         <input type="submit" value="Publish" class="btn btn-main w-100"/>
     </form>
 {% endblock content %}

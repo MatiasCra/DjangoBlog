@@ -1,7 +1,20 @@
 :root {
     --main-color: rgb(121, 82, 179);
     --secondary-color:rgb(255, 228, 132);
+    --secondary-color-light:rgba(255, 228, 132, .8);
     --bootstrap-primary-color: #0d6efd;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.nav-link:hover {
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+.nav-link.active {
+    color: rgba(255, 255, 255, 1) !important;
 }
 
 .bg-main {
@@ -65,5 +78,81 @@
 }
 
 .my-form input:focus, .my-form select:focus {
+    box-shadow: 0 0 0 4px rgba(121, 82, 179, .25);
+}
+
+.post-image {
+    border-radius: 0.25em;
+}
+
+.post-info {
+    border-bottom: 1px lightgray solid;
+    padding-bottom: 1rem;
+}
+
+a.card {
+    text-decoration: none;
+    color: inherit;
+}
+
+.link-container {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;    
+}
+
+.post-date {
+    font-size: .8em;
+}
+
+.author-avatar {
+    width: 3em;
+    aspect-ratio: 1;
+    border-radius: 100%;
+}
+
+.profile-avatar {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    align-self: center;
+}
+
+.fit-content {
+    width: fit-content;
+}
+
+.edit-profile {
+    width: fit-content;
+    height: fit-content;
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.edit-profile:hover{
+    background-color: var(--secondary-color-light);
+    border-color: var(--secondary-color-light);
+}
+
+.edit-profile:focus {
+    box-shadow: 0 0 0 4px rgba(255, 228, 132, .25);
+}
+
+edit-profile:active {
+    background-color: red;
+}
+
+.post-buttons {
+    position: absolute;
+    top: .7em;
+    right: .8em;
+}
+
+.pos-rel {
+    position: relative;
+}
+
+.post-buttons a:focus {
     box-shadow: 0 0 0 4px rgba(121, 82, 179, .25);
 }

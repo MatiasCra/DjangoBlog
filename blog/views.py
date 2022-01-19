@@ -8,7 +8,8 @@ from .models import Post
 
 
 def index(request):
-    return render(request, "blog/index.html", {"page": "Blog"})
+    posts = Post.objects.all().order_by("-date")
+    return render(request, "blog/index.html", {"page": "Blog", "posts": posts})
 
 
 def categories(request):
@@ -23,10 +24,17 @@ def delete_success(request):
     return render(
         request,
         "pages/page_delete_success.html",
-        {
-            "avatar": Profile.avatar_url(request.user.id),
-            "page": "Post deleted"
-        },
+        {"avatar": Profile.avatar_url(request.user.id), "page": "Post deleted"},
+    )
+
+
+def get_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+    author_avatar_url = Profile.avatar_url(post.user)
+    return render(
+        request,
+        "blog/post.html",
+        {"page": post.title, "post": post, "avatar": author_avatar_url},
     )
 
 

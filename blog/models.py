@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.core.exceptions import ObjectDoesNotExist
@@ -25,6 +24,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "categories"
+
 
 def custom_upload_to(instance, filename):
     try:
@@ -33,7 +35,7 @@ def custom_upload_to(instance, filename):
             old_instance.image.delete()
     except ObjectDoesNotExist:
         pass
-    return "profiles/" + filename
+    return "images/" + filename
 
 
 class Post(models.Model):
@@ -41,8 +43,8 @@ class Post(models.Model):
     subtitle = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now_add=True)
     content = RichTextField()
-    image = models.ImageField(upload_to=custom_upload_to, null=True, blank=True)
-    user = models.OneToOneField(User, on_delete=CASCADE)
+    image = models.ImageField(upload_to=custom_upload_to, null=True)
+    user = models.ForeignKey(User, on_delete=CASCADE)
     tags = models.ManyToManyField("Tag")
     category = models.ForeignKey(Category, on_delete=CASCADE)
 
