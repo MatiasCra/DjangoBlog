@@ -1,4 +1,3 @@
-from tkinter import Widget
 from django import forms
 from .models import Post
 
@@ -6,7 +5,7 @@ from .models import Post
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ("title", "subtitle", "image", "content", "category", "tags", "user")
+        fields = ("title", "subtitle", "image", "content", "category", "user", "tags")
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "subtitle": forms.TextInput(attrs={"class": "form-control"}),
@@ -14,4 +13,5 @@ class PostForm(forms.ModelForm):
             "tags": forms.SelectMultiple(attrs={"class": "form-select", "id": "tagsSelect"}),
             "category": forms.Select(attrs={"class": "form-select"}),
             "user": forms.HiddenInput(),
+            "tags": forms.HiddenInput(),
         }

@@ -14,37 +14,74 @@ function getCookie(cname) {
   return "";
 }
 
-const addTagToCategories = (tagName, tagId) => {
-  const cSelect = document.getElementById("tagsSelect");
-  newOption = document.createElement("option");
-  newOption.innerHTML = tagName;
-  newOption.value = tagId;
-  cSelect.appendChild(newOption);
+const addToTags = (tagName, tagId = -1) => {
+  const tagList = document.getElementById("tagList");
+  if (tagList.childElementCount === 1) {
+    tagList.children[0].classList.add("d-none");
+  }
+  const newLi = document.createElement("li");
+  newLi.className = "card px-2 my-1 tag-item";
+  newLi.innerHTML = tagName;
+  if (tagId === -1) {
+    newLi.id = tagName;
+  } else {
+    newLi.id = tagId;
+  }
+  newLi.addEventListener("click", () => {
+    newLi.parentNode.removeChild(newLi);
+    if (tagList.childElementCount === 1) {
+      tagList.children[0].classList.remove("d-none");
+    }
+  });
+
+  tagList.appendChild(newLi);
+};
+
+const filterCollectionByValue = (collection, val) => {
+  for (let index = 0; index < collection.length; index++) {
+    const element = collection[index];
+    if (element.value === val) {
+      return element;
+    }
+  }
+  return false;
+};
+
+const isValidTag = (tag) => {
+  isEmpty = !tag.trim().length;
+  isNumeric = !isNaN(tag) || !isNaN(parseFloat(tag));
+  console.log(!isEmpty && !isNumeric);
+  return !isEmpty && !isNumeric;
 };
 
 const addTagBtn = document.getElementById("addTagBtn");
-addTagBtn.addEventListener("click", () => {
-  const tagName = prompt("Name of the new tag:");
-  const csrftoken = getCookie("csrftoken");
-  myData = new FormData();
-  myData.append("tag", tagName);
+addTagBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  const tagDataList = document.getElementById("tagDataList");
+  if (isValidTag(tagDataList.value)) {
+    options = document.getElementsByTagName("option");
+    const opt = filterCollectionByValue(options, tagDataList.value);
+    if (opt) {
+      addToTags(opt.value, opt.id);
+    } else {
+      addToTags(tagDataList.value);
+    }
+  }
+  tagDataList.value = "";
+  tagDataList.focus();
+});
 
-  fetch("/blog/tag/add/", {
-    headers: {
-      "X-CSRFToken": csrftoken,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify({ tag: tagName }),
-  })
-    .then(function (res) {
-      console.log(res);
-      if (res.ok) {
-        res.text().then((tagId) => addTagToCategories(tagName, tagId));
-      }
-    })
-    .catch(function (res) {
-      console.log(res);
-    });
+const submitPostBtn = document.getElementById("publishBtn");
+submitPostBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  form = document.getElementById("postForm");
+  tags = document.getElementsByClassName("tag-item");
+  for (let index = 0; index < tags.length; index++) {
+    newInput = document.createElement("input");
+    newInput.type = "hidden";
+    newInput.name = "tags";
+    newInput.value = tags[index].id;
+    form.appendChild(newInput);
+  }
+  form.submit();
 });

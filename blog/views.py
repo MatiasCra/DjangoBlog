@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from sqlite3 import IntegrityError
+from django.shortcuts import render, redirect
 from .forms import PostForm
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from django.core.exceptions import ObjectDoesNotExist
 
 # from django.views.generic import ListView
 from accounts.models import Profile
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.decorators import user_passes_test
 from .models import Category, Post, Tag
 from django.http import HttpResponse
 import json
@@ -73,21 +76,60 @@ class UpdatePost(UserPassesTestMixin, UpdateView):
         return context
 
 
-class CreatePost(UserPassesTestMixin, CreateView):
-    model = Post
-    form_class = PostForm
-    success_url = "/blog/"
+@user_passes_test(lambda user: user.is_authenticated)
+def create_post(request):
+    if request.method == "POST":
+        files = request.FILES
+        data = request.POST.copy()
 
-    def test_func(self):
-        return self.request.user.is_authenticated
+        data.update(user=request.user)
+        tags = data.getlist("tags")
+        print("TAGS", tags)
+        tag_ids = []
+        for tag_info in tags:
+            if not tag_info.isspace() and tag_info != "":
+                try:
+                    tag = Tag.objects.get(id=tag_info)
+                    tag_ids.append(tag.id)
 
-    def get_context_data(self, **kwargs):
-        context = super(CreateView, self).get_context_data(**kwargs)
-        avatar = Profile.avatar_url(self.request.user.id)
-        context["avatar"] = avatar
-        context["page"] = "Create post"
-        context["action_title"] = "Create Post"
-        return context
+                except (ObjectDoesNotExist, ValueError):
+                    if not tag.isnumeric():
+                        tag = Tag(name=tag_info)
+                        tag.save()
+                        tag_ids.append(tag.id)
+
+                except IntegrityError:
+                    tag = Tag.objects.get(name=tag_info)
+                    tag_ids.append(tag.id)
+
+        data["tags"] = tag_ids
+        print("TAGS:", data["tags"])
+        return HttpResponse("SENT")
+
+        form = PostForm(data=data, files=files)
+        if form.is_valid():
+            form.save()
+            return redirect("Home")
+
+        return HttpResponse("Something went wrong :(")
+
+    if request.method == "GET":
+        avatar = Profile.avatar_url(request.user.id)
+        tags = Tag.objects.all()
+        page = "Create post"
+        action_title = "Create Post"
+        form = PostForm()
+        return render(
+            request,
+            "blog/post_form.html",
+            {
+                "avatar": avatar,
+                "tags": tags,
+                "page": page,
+                "action_title": action_title,
+                "form": form,
+            },
+        )
 
 
 class DeletePost(UserPassesTestMixin, DeleteView):

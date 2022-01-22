@@ -114,7 +114,7 @@ a.card {
 .link-container {
     text-decoration: none;
     color: inherit;
-    cursor: pointer;    
+    cursor: pointer;
 }
 
 .post-date {
@@ -185,4 +185,24 @@ a.card {
 
 .post-buttons a:focus {
     box-shadow: 0 0 0 4px rgba(121, 82, 179, .25);
+}
+
+.tag-list {
+    min-height: 1em;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.tag-list > li{
+    margin: 0 .2rem;
+    transition: background-color 100ms;
+    width: fit-content;
+}
+
+.tag-list > li:hover{
+    text-decoration: line-through;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, .1);
 }

@@ -45,7 +45,7 @@ class Post(models.Model):
     content = RichTextField()
     image = models.ImageField(upload_to=custom_upload_to, null=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
-    tags = models.ManyToManyField("Tag")
+    tags = models.ManyToManyField("Tag", blank=True)
     category = models.ForeignKey(Category, on_delete=CASCADE)
 
     def __str__(self):
@@ -58,7 +58,7 @@ class Post(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40, unique=True)
 
     def post_count(self):
         try:

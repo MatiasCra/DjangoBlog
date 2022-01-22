@@ -2,18 +2,36 @@
 <h1 class="text-center mb-3">{{ action_title }}</h1>
 <form
   method="post"
+  action="{% url 'Create' %}"
   class="my-form"
-  style="z-index: 1"
+  id="postForm"
   enctype="multipart/form-data"
 >
-  {{ form.errors }}
-  {% csrf_token %}
-  {{ form.media }}
-  {{ form.as_p }}
-  <button class="btn btn-outline-secondary w-100 mb-3" id="addTagBtn">
-    New tag
-  </button>
-  <input type="hidden" name="user" value="{{ user.id }}" />
-  <input type="submit" value="Publish" class="btn btn-main w-100" />
+  {{ form.errors }} {% csrf_token %} {{ form.media }} {{ form.as_p }}
+
+  <span>Tags:</span>
+  <ul id="tagList" class="card bg-light mt-2 p-2 tag-list">
+    <span class="text-center text-muted w-100" id="noTagsText">No tags added</span>
+  </ul>
+  
+  <label for="exampletDataList" class="form-label d-block">Add tags:</label>
+  <div class="d-flex flex-row justify-content-between mb-3">
+    <input
+    class="form-control d-inline me-2"
+    list="datalistOptions"
+    id="tagDataList"
+    placeholder="Add a tag..."
+    />
+    <datalist id="datalistOptions">
+      {% for tag in tags %}
+      <option value="{{ tag.name }}" id="{{ tag.id }}"></option>
+      {% endfor %}
+    </datalist>
+    <button class="btn btn-outline-secondary" id="addTagBtn">
+      Add
+    </button>
+  </div>
+
+  <input type="button" value="Publish" class="btn btn-main w-100" id="publishBtn"/>
 </form>
 {% endblock content %}
