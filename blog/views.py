@@ -48,11 +48,12 @@ def delete_success(request):
 
 def get_post(request, post_id):
     post = Post.objects.get(id=post_id)
+    tags = post.tags.all()
     author_avatar_url = Profile.avatar_url(post.user)
     return render(
         request,
         "blog/post.html",
-        {"page": post.title, "post": post, "avatar": author_avatar_url},
+        {"page": post.title, "post": post, "tags": tags, "avatar": author_avatar_url},
     )
 
 
@@ -84,7 +85,7 @@ def create_post(request):
 
         data.update(user=request.user)
         tags = data.getlist("tags")
-        print("TAGS", tags)
+
         tag_ids = []
         for tag_info in tags:
             if not tag_info.isspace() and tag_info != "":
@@ -93,7 +94,7 @@ def create_post(request):
                     tag_ids.append(tag.id)
 
                 except (ObjectDoesNotExist, ValueError):
-                    if not tag.isnumeric():
+                    if not tag_info.isnumeric():
                         tag = Tag(name=tag_info)
                         tag.save()
                         tag_ids.append(tag.id)
@@ -101,15 +102,19 @@ def create_post(request):
                 except IntegrityError:
                     tag = Tag.objects.get(name=tag_info)
                     tag_ids.append(tag.id)
-
-        data["tags"] = tag_ids
-        print("TAGS:", data["tags"])
-        return HttpResponse("SENT")
+                    
+        print("IDS:", tag_ids)
+        data.pop("tags")
+        data.update({"tags": tag_ids})
+            
+        print("\nDATA:\n", data.lists, "\n")
 
         form = PostForm(data=data, files=files)
         if form.is_valid():
             form.save()
             return redirect("Home")
+        else:
+            print("\n\n", form.errors)
 
         return HttpResponse("Something went wrong :(")
 

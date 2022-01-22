@@ -187,7 +187,7 @@ a.card {
     box-shadow: 0 0 0 4px rgba(121, 82, 179, .25);
 }
 
-.tag-list {
+.tag-list, .tag-list-ro {
     min-height: 1em;
     list-style: none;
     display: flex;
@@ -195,7 +195,7 @@ a.card {
     flex-wrap: wrap;
 }
 
-.tag-list > li{
+.tag-list > li, .tag-list-ro > li{
     margin: 0 .2rem;
     transition: background-color 100ms;
     width: fit-content;
