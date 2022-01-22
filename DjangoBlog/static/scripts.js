@@ -83,5 +83,7 @@ submitPostBtn.addEventListener("click", (e) => {
     newInput.value = tags[index].id;
     form.appendChild(newInput);
   }
-  form.submit();
+  if (form.checkValidity()){
+    form.submit();
+  }
 });
