@@ -1,5 +1,14 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% load static %}
 {% block content %}
-    <h1 class="text-center">My posts</h1>
+<h1 class="text-center">My Posts</h1>
+{% if posts %}
+    {% for post in posts %}
+        {% include 'blog/post_card.html' %} 
+    {% endfor %}
+{% else %}
+    <div class="text-center my-3">
+    <span>You haven't written any post yet. </span>
+    <a href="{% url 'Create' %}" class="color-main my-link">Create one now.</a>
+    </div>
+{% endif %}
 {% endblock content %}
-    

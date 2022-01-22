@@ -13,7 +13,7 @@ class ProfileForm(forms.Form):
         widget=forms.EmailInput(attrs={"class": "form-control"}),
     )
     avatar = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={"class": "form-control"}),
+        widget=forms.FileInput(attrs={"class": "form-control d-flex justify-content-center"}),
         required=False
     )
     bio = forms.CharField(
