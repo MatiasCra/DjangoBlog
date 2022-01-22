@@ -1,5 +1,21 @@
 {% extends 'layout.html' %}
 {% block content %}
     <h1 class="text-center">Categories</h1>
+    <div class="row my-3">
+        <div class="col card bg-light">
+            <ul class="d-flex ps-0 py-2 mb-0 flex-column align-items-center text-center my-list">
+                {% for cat in categories %}
+                    <li class="d-block py-2 border-bottom w-100">
+                        <a href="{% url 'Categories' %}?category={{ cat.id }}" class="my-link d-block">
+                            {{ cat }}
+                        </a>
+                    </li>
+                    <li class="d-block py-2 border-bottom w-100">
+                        Ejemplo
+                    </li>
+                {% endfor %}    
+            </ul>        
+        </div>
+    </div>
 {% endblock content %}
     

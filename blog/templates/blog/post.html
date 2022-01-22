@@ -1,6 +1,20 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="post-info">
-  <h3 class="display-4">{{ post.title }}</h3>
+  <div class="d-flex flex-column flex-xl-row-reverse justify-content-between">
+    {% if post.user.id == user.id %}
+      <div class="col-xl-auto col-12 d-flex flex-column">
+        <a href="#" class="btn secondary-btn mb-1 d-block d-xl-inline w-100">
+          Edit
+        </a>
+        <a href="#" class="btn danger-btn mb-3 d-block d-xl-inline w-100">
+          Delete
+        </a>
+      </div>
+      <h3 class="display-4 col-xl-10">{{ post.title }}</h3>
+    {% else %}
+       <h3 class="display-4 w-100">{{ post.title }}</h3>
+    {% endif %}
+  </div>
   <h6 class="lead">{{ post.subtitle }}</h6>
   <a
     class="d-flex justify-content-start align-items-center link-container"

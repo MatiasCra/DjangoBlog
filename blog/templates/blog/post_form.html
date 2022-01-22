@@ -1,13 +1,19 @@
-{% extends 'layout.html' %}
-{% block content %}
-    <h1 class="text-center mb-3">{{ action_title }}</h1>
-    <form method="post" class="my-form" enctype="multipart/form-data">
-        {{ form.errors }}
-        {% csrf_token %}
-        {{ form.media }}
-        {{ form.as_p }}
-        <input type="hidden" name="user" value="{{ user.id }}" />
-        <input type="submit" value="Publish" class="btn btn-main w-100"/>
-    </form>
+{% extends 'layout.html' %} {% block content %}
+<h1 class="text-center mb-3">{{ action_title }}</h1>
+<form
+  method="post"
+  class="my-form"
+  style="z-index: 1"
+  enctype="multipart/form-data"
+>
+  {{ form.errors }}
+  {% csrf_token %}
+  {{ form.media }}
+  {{ form.as_p }}
+  <button class="btn btn-outline-secondary w-100 mb-3" id="addTagBtn">
+    New tag
+  </button>
+  <input type="hidden" name="user" value="{{ user.id }}" />
+  <input type="submit" value="Publish" class="btn btn-main w-100" />
+</form>
 {% endblock content %}
-    

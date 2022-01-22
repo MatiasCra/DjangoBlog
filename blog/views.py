@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from .forms import PostForm
-from django.views.generic.edit import UpdateView, CreateView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import UpdateView, CreateView, DeleteView
+
+# from django.views.generic import ListView
 from accounts.models import Profile
 from django.contrib.auth.mixins import UserPassesTestMixin
-from .models import Post
+from .models import Category, Post, Tag
+from django.http import HttpResponse
+import json
 
 
 def index(request):
@@ -13,11 +16,23 @@ def index(request):
 
 
 def categories(request):
-    return render(request, "blog/categories.html", {"page": "Categories"})
+    if request.method == "GET":
+        category = request.GET.get("category")
+        if category is not None:
+            posts = Post.objects.filter(category=category)
+            return render(
+                request, "blog/index.html", {"page": "Categories", "posts": posts}
+            )
+
+    cats = Category.objects.all()
+    return render(
+        request, "blog/categories.html", {"page": "Categories", "categories": cats}
+    )
 
 
 def myposts(request):
-    return render(request, "blog/myposts.html", {"page": "My posts"})
+    posts = Post.objects.filter(user=request.user.id).order_by("-date")
+    return render(request, "blog/myposts.html", {"page": "My Posts", "posts": posts})
 
 
 def delete_success(request):
@@ -91,3 +106,11 @@ class DeletePost(UserPassesTestMixin, DeleteView):
         context["avatar"] = avatar
         context["page"] = "Delete post"
         return context
+
+
+def add_tag(request):
+    if request.method == "POST":
+        tag_name = json.loads(request.body.decode("utf-8")).get("tag")
+        tag = Tag(name=tag_name)
+        tag.save()
+        return HttpResponse(tag.id)

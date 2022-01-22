@@ -5,6 +5,7 @@
     action="{% url 'EditProfile' user_id %}"
     method="post"
     enctype="multipart/form-data"
+    class="my-form"
   >
     {% csrf_token %} {{ form.as_p }}
     <input type="submit" value="Send" class="btn btn-main w-100" />

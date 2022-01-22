@@ -33,11 +33,11 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}" />
   </head>
   <body>
-    <div class="d-flex flex-column" style="min-height: 100vh">
+    <div class="d-flex flex-column" style="min-height: 100vh; position: relative;">
       <!-- Navigation-->
       <nav class="navbar navbar-expand-lg navbar-dark static-top bg-main">
-        <div class="container col-lg-10">
-          <a class="navbar-brand" style="" href="{% url 'Home' %}">Start</a>
+        <div class="container col-lg-10 align-items-baseline">
+          <a class="navbar-brand" href="{% url 'Home' %}">Start</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -65,11 +65,11 @@
               </li>
               <li class="nav-item">
                 <a
-                  class="nav-link {% if page == 'My posts' %} active {% endif %}"
+                  class="nav-link {% if page == 'My Posts' %} active {% endif %}"
                   aria-current="page"
                   href="{% url 'MyPosts' %}"
                 >
-                  My posts
+                  My Posts
                 </a>
               </li>
               <li class="nav-item">
@@ -93,7 +93,7 @@
               </li>
               {% endif %}
             </ul>
-            <div class="w-fit">
+            <div class="w-fit d-flex">
               {% if not user.is_authenticated %}
               <div class="nav-item mx-1 my-auto">
                 <a

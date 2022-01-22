@@ -2,7 +2,22 @@
     --main-color: rgb(121, 82, 179);
     --secondary-color:rgb(255, 228, 132);
     --secondary-color-light:rgba(255, 228, 132, .8);
+    --danger-color: rgb(239, 145, 145);
+    --danger-color-light: rgb(245, 158, 158);
+
     --bootstrap-primary-color: #0d6efd;
+}
+
+.my-list {
+    list-style: none;
+}
+
+.my-list > li:last-child {
+    border: none !important;
+}
+
+.color-main, .my-link.color-main {
+    color: var(--main-color);
 }
 
 .nav-link {
@@ -70,14 +85,15 @@
 
 .my-form > p {
     display: flex;
-    align-items: center;
+    align-items: baseline;
+    flex-wrap: wrap;
 }
 
 .my-form > p > label {
-    margin-right: .5em;
+    margin-bottom: .5em;
 }
 
-.my-form input:focus, .my-form select:focus {
+.my-form input:focus, .my-form select:focus, .my-form textarea:focus {
     box-shadow: 0 0 0 4px rgba(121, 82, 179, .25);
 }
 
@@ -122,7 +138,7 @@ a.card {
     width: fit-content;
 }
 
-.edit-profile {
+.secondary-btn {
     width: fit-content;
     height: fit-content;
     background-color: var(--secondary-color);
@@ -130,17 +146,31 @@ a.card {
     font-weight: bold;
 }
 
-.edit-profile:hover{
+.secondary-btn:hover{
     background-color: var(--secondary-color-light);
     border-color: var(--secondary-color-light);
 }
 
-.edit-profile:focus {
+
+.secondary-btn:focus {
     box-shadow: 0 0 0 4px rgba(255, 228, 132, .25);
 }
 
-edit-profile:active {
-    background-color: red;
+.danger-btn {
+    width: fit-content;
+    height: fit-content;
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    font-weight: bold;
+}
+
+.danger-btn:hover{
+    background-color: var(--danger-color-light);
+    border-color: var(--danger-color-light);
+}
+
+.danger-btn:focus {
+    box-shadow: 0 0 0 4px rgba(239, 132, 132, .25);
 }
 
 .post-buttons {
