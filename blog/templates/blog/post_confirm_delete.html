@@ -1,0 +1,9 @@
+{% extends 'layout.html' %} {% load static %}
+{% block content %}
+<h1 class="text-center">Delete Post</h1>
+<form method="post" class="text-center">
+    {% csrf_token %}
+    <span class="w-100 d-block">Are you sure you want to delete the post <b>{{ post }}</b>?</span>
+    <button type="submit" class="btn danger-btn mt-2">Delete</button>
+</form>
+{% endblock content %}

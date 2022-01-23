@@ -1,0 +1,8 @@
+{% extends 'layout.html' %} {% load static %}
+{% block content %}
+<h1 class="text-center">Post deleted</h1>
+<div class="text-center">
+    <span class="d-block">The post was deleted successfully</span>
+    <a href="{% url 'Home' %}" class="btn btn-main mt-2">Home</a>
+</div>
+{% endblock content %}

@@ -41,8 +41,8 @@ def myposts(request):
 def delete_success(request):
     return render(
         request,
-        "pages/page_delete_success.html",
-        {"avatar": Profile.avatar_url(request.user.id), "page": "Post deleted"},
+        "blog/post_delete_success.html",
+        {"page": "Post deleted"},
     )
 
 
@@ -152,6 +152,7 @@ class DeletePost(UserPassesTestMixin, DeleteView):
         avatar = Profile.avatar_url(self.request.user.id)
         context["avatar"] = avatar
         context["page"] = "Delete post"
+        context["post"] = self.object.title
         return context
 
 
