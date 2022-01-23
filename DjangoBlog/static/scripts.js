@@ -14,6 +14,18 @@ function getCookie(cname) {
   return "";
 }
 
+const tagLis = document.getElementsByClassName("tag-item")
+for (let index = 0; index < tagLis.length; index++) {
+  const tagLi = tagLis[index];
+  tagLi.addEventListener("click", () => {
+    tagLi.parentNode.removeChild(tagLi);
+    const tagList = document.getElementById("tagList");
+    if (tagList.childElementCount === 1) {
+      tagList.children[0].classList.remove("d-none");
+    }
+  });
+}
+
 const addToTags = (tagName, tagId = -1) => {
   const tagList = document.getElementById("tagList");
   if (tagList.childElementCount === 1) {

@@ -2,7 +2,7 @@
 <h1 class="text-center mb-3">{{ action_title }}</h1>
 <form
   method="post"
-  action="{% url 'Create' %}"
+  action="{% if page == 'Create post' %}{% url 'Create' %}{% else %}{% url 'Update' post_id %}{% endif %}"
   class="my-form"
   id="postForm"
   enctype="multipart/form-data"
@@ -11,7 +11,15 @@
 
   <span>Tags:</span>
   <ul id="tagList" class="card bg-light mt-2 p-2 tag-list">
-    <span class="text-center text-muted w-100" id="noTagsText">No tags added</span>
+    <span class="text-center text-muted w-100 {% if post_tags %} d-none {% endif %}"
+          id="noTagsText">
+          No tags added
+    </span>
+    {% if post_tags %}
+      {% for tag in post_tags %}
+        <li class="card px-2 my-1 tag-item" id="{{ tag.id }}">{{ tag.name }}</li>
+      {% endfor %}
+    {% endif %}
   </ul>
   
   <label for="exampletDataList" class="form-label d-block">Add tags:</label>

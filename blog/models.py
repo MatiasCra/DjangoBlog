@@ -29,9 +29,12 @@ class Category(models.Model):
 
 
 def custom_upload_to(instance, filename):
+        
     try:
         old_instance = Post.objects.get(pk=instance.pk)
         if old_instance.image is not None:
+            if not filename:
+                filename = old_instance.image.url
             old_instance.image.delete()
     except ObjectDoesNotExist:
         pass
@@ -43,7 +46,7 @@ class Post(models.Model):
     subtitle = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now_add=True)
     content = RichTextField()
-    image = models.ImageField(upload_to=custom_upload_to, null=True)
+    image = models.ImageField(upload_to=custom_upload_to, blank=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
     tags = models.ManyToManyField("Tag", blank=True)
     category = models.ForeignKey(Category, on_delete=CASCADE)

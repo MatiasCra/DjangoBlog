@@ -103,23 +103,17 @@ def create_post(request):
                     tag = Tag.objects.get(name=tag_info)
                     tag_ids.append(tag.id)
                     
-        print("IDS:", tag_ids)
         data.pop("tags")
         data.update({"tags": tag_ids})
             
-        print("\nDATA:\n", data.lists, "\n")
-
         form = PostForm(data=data, files=files)
-        if form.is_valid():
+        if files and form.is_valid():
             form.save()
             return redirect("Home")
         else:
-            print("\n\n", form.errors)
-
-        return HttpResponse("Something went wrong :(")
+            return HttpResponse(form.errors)
 
     if request.method == "GET":
-        avatar = Profile.avatar_url(request.user.id)
         tags = Tag.objects.all()
         page = "Create post"
         action_title = "Create Post"
@@ -128,13 +122,85 @@ def create_post(request):
             request,
             "blog/post_form.html",
             {
-                "avatar": avatar,
                 "tags": tags,
                 "page": page,
                 "action_title": action_title,
                 "form": form,
             },
         )
+
+
+@user_passes_test(lambda user: user.is_authenticated)
+def update_post(request, pk):
+    post = Post.objects.get(id=pk)
+    if request.method == "POST":
+        files = request.FILES
+        image = files.get("image")
+        if image:
+            post.image = image
+
+        data = request.POST.copy()
+        data.update(user=request.user)
+        tags = data.getlist("tags")
+        tag_ids = []
+        for tag_info in tags:
+            if not tag_info.isspace() and tag_info != "":
+                try:
+                    tag = Tag.objects.get(id=tag_info)
+                    tag_ids.append(tag.id)
+
+                except (ObjectDoesNotExist, ValueError):
+                    if not tag_info.isnumeric():
+                        tag = Tag(name=tag_info)
+                        tag.save()
+                        tag_ids.append(tag.id)
+
+                except IntegrityError:
+                    tag = Tag.objects.get(name=tag_info)
+                    tag_ids.append(tag.id)
+        
+        data.pop("tags")
+        data.update({"tags": tag_ids})
+            
+        form = PostForm(data=data, files=files)
+        if form.is_valid():
+            post.title = data.get("title")
+            post.subtitle = data.get("subtitle")
+            post.content = data.get("content")
+            post.category = Category.objects.get(id=data.get("category"))
+            for tag in tag_ids:
+                post.tags.add(Tag.objects.get(id=tag))
+
+            post.save()
+
+            return redirect("Home")
+        else:
+            return HttpResponse(form.errors)
+    
+    if request.method == "GET":
+        if request.user.id != post.user.id:
+            return redirect("Home")
+        tags = Tag.objects.all()
+        page = "Edit post"
+        action_title = "Edit Post"
+        data = post.__dict__
+        data["category"] = post.category.id
+        form = PostForm(initial=data)
+        post_tags = post.tags.all()
+        return render(
+            request,
+            "blog/post_form.html",
+            {
+                "tags": tags,
+                "post_tags": post_tags,
+                "post_id": post.id,
+                "page": page,
+                "action_title": action_title,
+                "form": form,
+            },
+        )
+
+    return HttpResponse(f"TODO: {pk}")
 
 
 class DeletePost(UserPassesTestMixin, DeleteView):
