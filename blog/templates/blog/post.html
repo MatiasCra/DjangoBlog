@@ -3,10 +3,10 @@
   <div class="d-flex flex-column flex-xl-row-reverse justify-content-between">
     {% if post.user.id == user.id %}
       <div class="col-xl-auto col-12 d-flex flex-column">
-        <a href="#" class="btn secondary-btn mb-1 d-block d-xl-inline w-100">
+        <a href="{% url 'Update' post.id %}" class="btn secondary-btn mb-1 d-block d-xl-inline w-100">
           Edit
         </a>
-        <a href="#" class="btn danger-btn mb-3 d-block d-xl-inline w-100">
+        <a href="{% url 'Delete' post.id %}" class="btn danger-btn mb-3 d-block d-xl-inline w-100">
           Delete
         </a>
       </div>
