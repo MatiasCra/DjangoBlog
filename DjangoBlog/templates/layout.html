@@ -63,24 +63,37 @@
                   Categories
                 </a>
               </li>
-              <li class="nav-item">
-                <a
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a
+                    class="nav-link {% if page == 'Favourites' %} active {% endif %}"
+                    aria-current="page"
+                    href="{% url 'Favourites' %}"
+                  >
+                    Favourites
+                  </a>
+                </li>
+              {% endif %}
+              {% if user.is_staff %}  
+                <li class="nav-item">
+                  <a
                   class="nav-link {% if page == 'My Posts' %} active {% endif %}"
                   aria-current="page"
                   href="{% url 'MyPosts' %}"
-                >
-                  My Posts
-                </a>
-              </li>
-              <li class="nav-item">
-                <a
+                  >
+                    My Posts
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
                   class="nav-link {% if page == 'Create post' %} active {% endif %}"
                   aria-current="page"
                   href="{% url 'Create' %}"
-                >
-                  Create
-                </a>
-              </li>
+                  >
+                    Create
+                  </a>
+                </li>
+              {% endif %}
               {% if user.is_authenticated %}
               <li class="nav-item">
                 <a
@@ -123,7 +136,7 @@
         </div>
       </nav>
       <div class="pt-2 pb-4 container flex-grow-1">
-        <div class="col-lg-7 col-md-9 col-sm-11 mx-auto p-3">
+        <div class="col-lg-8 col-md-10 col-sm-11 mx-auto p-3">
           {% block content %} {% endblock content %}
         </div>
       </div>

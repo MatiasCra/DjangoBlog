@@ -29,7 +29,7 @@ class Category(models.Model):
 
 
 def custom_upload_to(instance, filename):
-        
+
     try:
         old_instance = Post.objects.get(pk=instance.pk)
         if old_instance.image is not None:
@@ -71,3 +71,20 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Favourite(models.Model):
+    user = models.ForeignKey(User, on_delete=CASCADE)
+    post = models.ForeignKey(Post, on_delete=CASCADE)
+
+    @classmethod
+    @staticmethod
+    def is_favourited(user_id, post_id):
+        try:
+            Favourite.objects.get(user=user_id, post=post_id)
+            return True
+        except ObjectDoesNotExist:
+            return False
+
+    def __str__(self):
+        return f"{self.user} <==> {self.post}"

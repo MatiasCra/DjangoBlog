@@ -206,3 +206,15 @@ a.card {
     cursor: pointer;
     background-color: rgba(0, 0, 0, .1);
 }
+
+.favicon {
+    transition: color 200ms;
+}
+
+.favicon:hover {
+    cursor: pointer;
+}
+
+.favicon.selected {
+    color: var(--secondary-color);
+}

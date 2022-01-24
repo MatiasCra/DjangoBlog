@@ -1,3 +1,4 @@
+// To get the tocken
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
@@ -14,18 +15,22 @@ function getCookie(cname) {
   return "";
 }
 
-const tagLis = document.getElementsByClassName("tag-item")
-for (let index = 0; index < tagLis.length; index++) {
-  const tagLi = tagLis[index];
-  tagLi.addEventListener("click", () => {
-    tagLi.parentNode.removeChild(tagLi);
-    const tagList = document.getElementById("tagList");
-    if (tagList.childElementCount === 1) {
-      tagList.children[0].classList.remove("d-none");
-    }
-  });
+// Remove the tags on click
+const tagLis = document.getElementsByClassName("tag-item");
+if (tagLis) {
+  for (let index = 0; index < tagLis.length; index++) {
+    const tagLi = tagLis[index];
+    tagLi.addEventListener("click", () => {
+      tagLi.parentNode.removeChild(tagLi);
+      const tagList = document.getElementById("tagList");
+      if (tagList.childElementCount === 1) {
+        tagList.children[0].classList.remove("d-none");
+      }
+    });
+  }
 }
 
+// Add to list and listener to remove them on click
 const addToTags = (tagName, tagId = -1) => {
   const tagList = document.getElementById("tagList");
   if (tagList.childElementCount === 1) {
@@ -34,6 +39,7 @@ const addToTags = (tagName, tagId = -1) => {
   const newLi = document.createElement("li");
   newLi.className = "card px-2 my-1 tag-item";
   newLi.innerHTML = tagName;
+  // If it's not an existing tag, send the name to create it
   if (tagId === -1) {
     newLi.id = tagName;
   } else {
@@ -41,6 +47,7 @@ const addToTags = (tagName, tagId = -1) => {
   }
   newLi.addEventListener("click", () => {
     newLi.parentNode.removeChild(newLi);
+    // Show no tags message
     if (tagList.childElementCount === 1) {
       tagList.children[0].classList.remove("d-none");
     }
@@ -49,6 +56,7 @@ const addToTags = (tagName, tagId = -1) => {
   tagList.appendChild(newLi);
 };
 
+// HTMLCollection class does not seem to have a filter method
 const filterCollectionByValue = (collection, val) => {
   for (let index = 0; index < collection.length; index++) {
     const element = collection[index];
@@ -62,40 +70,74 @@ const filterCollectionByValue = (collection, val) => {
 const isValidTag = (tag) => {
   isEmpty = !tag.trim().length;
   isNumeric = !isNaN(tag) || !isNaN(parseFloat(tag));
-  console.log(!isEmpty && !isNumeric);
   return !isEmpty && !isNumeric;
 };
 
+// Add tag entered to the list
 const addTagBtn = document.getElementById("addTagBtn");
-addTagBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  const tagDataList = document.getElementById("tagDataList");
-  if (isValidTag(tagDataList.value)) {
-    options = document.getElementsByTagName("option");
-    const opt = filterCollectionByValue(options, tagDataList.value);
-    if (opt) {
-      addToTags(opt.value, opt.id);
-    } else {
-      addToTags(tagDataList.value);
+if (addTagBtn) {
+  addTagBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const tagDataList = document.getElementById("tagDataList");
+    if (isValidTag(tagDataList.value)) {
+      options = document.getElementsByTagName("option");
+      const opt = filterCollectionByValue(options, tagDataList.value);
+      // If it's not an existing tag, send the name to create it
+      if (opt) {
+        addToTags(opt.value, opt.id);
+      } else {
+        addToTags(tagDataList.value);
+      }
     }
-  }
-  tagDataList.value = "";
-  tagDataList.focus();
-});
+    tagDataList.value = "";
+    tagDataList.focus();
+  });
+}
 
+// Add tags to form as hidden inputs
 const submitPostBtn = document.getElementById("publishBtn");
-submitPostBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  form = document.getElementById("postForm");
-  tags = document.getElementsByClassName("tag-item");
-  for (let index = 0; index < tags.length; index++) {
-    newInput = document.createElement("input");
-    newInput.type = "hidden";
-    newInput.name = "tags";
-    newInput.value = tags[index].id;
-    form.appendChild(newInput);
-  }
-  if (form.checkValidity()){
-    form.submit();
-  }
-});
+if (submitPostBtn) {
+  submitPostBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    form = document.getElementById("postForm");
+    tags = document.getElementsByClassName("tag-item");
+    for (let index = 0; index < tags.length; index++) {
+      newInput = document.createElement("input");
+      newInput.type = "hidden";
+      newInput.name = "tags";
+      newInput.value = tags[index].id;
+      form.appendChild(newInput);
+    }
+    if (form.checkValidity()) {
+      form.submit();
+    }
+  });
+}
+
+// Favourite the post
+const favIconI = document.getElementById("favIconI");
+if (favIconI) {
+  favIconI.addEventListener("click", (e) => {
+    favIconI.classList.toggle("selected");
+    favIconI.classList.toggle("bi-star");
+    favIconI.classList.toggle("bi-star-fill");
+
+    const csrftoken = getCookie("csrftoken");
+    postId = favIconI.parentElement.id
+
+    fetch("/blog/post/favourite/" + postId, {
+      headers: {
+        "X-CSRFToken": csrftoken,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    })
+      .then(function (res) {
+        console.log(res);
+      })
+      .catch(function (res) {
+        console.log(res);
+      });
+   });
+}

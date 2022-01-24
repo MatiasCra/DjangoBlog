@@ -1,8 +1,15 @@
 {% extends 'layout.html' %}
 {% load static %}
 {% block content %}
-    <h1 class="text-center">Posts</h1>
-    {% for post in posts %}
-        {% include 'blog/post_card.html' %}     
-    {% endfor %}
+    <h1 class="text-center">{% if page == "Blog" %}Posts{% else %}{{ page }}{% endif %}</h1>
+    
+    {% if not posts %}
+        <span class="text-center h6 d-block mt-3">
+            {{ no_posts_message }}
+        </span>
+    {% else %}
+        {% for post in posts %}
+            {% include 'blog/post_card.html' %}     
+        {% endfor %}
+    {% endif %}
 {% endblock content %}

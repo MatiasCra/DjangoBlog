@@ -1,21 +1,35 @@
 from sqlite3 import IntegrityError
 from django.shortcuts import render, redirect
 from .forms import PostForm
-from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from django.views.generic.edit import UpdateView, DeleteView
 from django.core.exceptions import ObjectDoesNotExist
 
 # from django.views.generic import ListView
 from accounts.models import Profile
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
-from .models import Category, Post, Tag
-from django.http import HttpResponse
-import json
+from .models import Category, Post, Tag, Favourite
+from django.http import HttpResponse, HttpResponseNotModified
 
 
 def index(request):
     posts = Post.objects.all().order_by("-date")
     return render(request, "blog/index.html", {"page": "Blog", "posts": posts})
+
+
+@user_passes_test(lambda user: user.is_authenticated)
+def favourites(request):
+    posts = [
+        post
+        for post in Post.objects.all()
+        if Favourite.objects.filter(user=request.user, post=post.id).count() > 0
+    ]
+    no_posts_message = "No favourites added yet."
+    return render(
+        request,
+        "blog/index.html",
+        {"page": "Favourites", "no_posts_message": no_posts_message, "posts": posts},
+    )
 
 
 def categories(request):
@@ -24,7 +38,9 @@ def categories(request):
         if category is not None:
             posts = Post.objects.filter(category=category)
             return render(
-                request, "blog/index.html", {"page": "Categories", "posts": posts}
+                request,
+                "blog/index.html",
+                {"page": Category.objects.get(id=category), "posts": posts},
             )
 
     cats = Category.objects.all()
@@ -50,10 +66,17 @@ def get_post(request, post_id):
     post = Post.objects.get(id=post_id)
     tags = post.tags.all()
     author_avatar_url = Profile.avatar_url(post.user)
+    is_fav = Favourite.is_favourited(user_id=request.user.id, post_id=post_id)
     return render(
         request,
         "blog/post.html",
-        {"page": post.title, "post": post, "tags": tags, "avatar": author_avatar_url},
+        {
+            "page": post.title,
+            "post": post,
+            "is_fav": is_fav,
+            "tags": tags,
+            "avatar": author_avatar_url,
+        },
     )
 
 
@@ -102,10 +125,10 @@ def create_post(request):
                 except IntegrityError:
                     tag = Tag.objects.get(name=tag_info)
                     tag_ids.append(tag.id)
-                    
+
         data.pop("tags")
         data.update({"tags": tag_ids})
-            
+
         form = PostForm(data=data, files=files)
         if files and form.is_valid():
             form.save()
@@ -158,10 +181,10 @@ def update_post(request, pk):
                 except IntegrityError:
                     tag = Tag.objects.get(name=tag_info)
                     tag_ids.append(tag.id)
-        
+
         data.pop("tags")
         data.update({"tags": tag_ids})
-            
+
         form = PostForm(data=data, files=files)
         if form.is_valid():
             post.title = data.get("title")
@@ -176,7 +199,7 @@ def update_post(request, pk):
             return redirect("Home")
         else:
             return HttpResponse(form.errors)
-    
+
     if request.method == "GET":
         if request.user.id != post.user.id:
             return redirect("Home")
@@ -222,9 +245,19 @@ class DeletePost(UserPassesTestMixin, DeleteView):
         return context
 
 
-def add_tag(request):
-    if request.method == "POST":
-        tag_name = json.loads(request.body.decode("utf-8")).get("tag")
-        tag = Tag(name=tag_name)
-        tag.save()
-        return HttpResponse(tag.id)
+@user_passes_test(lambda user: user.is_authenticated)
+def toggle_favourite(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+        if Favourite.is_favourited(user_id=request.user.id, post_id=post_id):
+            fav = Favourite.objects.get(user=request.user.id, post=post_id)
+            fav.delete()
+            return HttpResponse("Deleted")
+        else:
+            fav = Favourite(user=request.user, post=post)
+            fav.save()
+            return HttpResponse("Created")
+    except ObjectDoesNotExist:
+        pass
+
+    return HttpResponseNotModified()
