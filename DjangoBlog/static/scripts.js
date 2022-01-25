@@ -114,7 +114,7 @@ if (submitPostBtn) {
   });
 }
 
-// Favourite the post
+// Toggle the favourite of the post
 const favIconI = document.getElementById("favIconI");
 if (favIconI) {
   favIconI.addEventListener("click", (e) => {
@@ -125,6 +125,7 @@ if (favIconI) {
     const csrftoken = getCookie("csrftoken");
     postId = favIconI.parentElement.id
 
+    // Adds/removes from favourites from the db
     fetch("/blog/post/favourite/" + postId, {
       headers: {
         "X-CSRFToken": csrftoken,

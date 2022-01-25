@@ -191,8 +191,13 @@ def update_post(request, pk):
             post.subtitle = data.get("subtitle")
             post.content = data.get("content")
             post.category = Category.objects.get(id=data.get("category"))
+
             for tag in tag_ids:
                 post.tags.add(Tag.objects.get(id=tag))
+
+            for tag in post.tags.all():
+                if tag.id not in tag_ids:
+                    post.tags.remove(tag)
 
             post.save()
 
