@@ -55,6 +55,12 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def comments(self):
+        try:
+            return Comment.objects.filter(post=self.id)
+        except ObjectDoesNotExist:
+            return None
+
     def has_tag(self, tag_id: int):
         return self.tags.filter(id=tag_id).count() > 0
 
@@ -110,3 +116,6 @@ class Comment(models.Model):
             return Profile.objects.get(user=self.user)
         except ObjectDoesNotExist:
             return None
+
+    def __str__(self):
+        return f"{self.user} on {self.post}: {self.content:.30}"

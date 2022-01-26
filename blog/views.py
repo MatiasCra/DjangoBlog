@@ -4,7 +4,6 @@ from .forms import PostForm
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.exceptions import ObjectDoesNotExist
 
-# from django.views.generic import ListView
 from accounts.models import Profile
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test

@@ -55,6 +55,29 @@
       <span class="text-center text-muted w-100" id="noTagsText">No tags added</span>
     {% endif %}
   </ul>
-    
+  <div class="border-top">
+    <h5 class="py-3">Comments</h5>
+    <div class="card p-3">
+      {% for comment in post.comments %}
+        <div
+          class="d-flex justify-content-start align-items-center link-container"
+        >
+          <div class="d-flex flex-column align-items-center justify-content-center text-center">
+            {% if comment.profile %}
+              <img src="{{ comment.profile.avatar.url }}" alt="author-avatar" class="author-avatar mx-auto" /> 
+            {% else %}
+              <img src="{{ default_avatar }}" alt="author-avatar" class="author-avatar" /> 
+            {% endif %}
+            <p class="display-5 fs-5">
+              {{ comment.user.username }}
+            </p>
+          </div>
+          <p class="m-0 ms-3 p-2 card bg-light">
+            {{ comment.content }} 
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock content %}
