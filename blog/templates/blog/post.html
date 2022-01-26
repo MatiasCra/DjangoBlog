@@ -1,5 +1,8 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="post-info">
+  {{ user.username|json_script:"usernameContext" }}
+  {{ user_avatar|json_script:"avatarContext" }}
+  {{ post.id|json_script:"postIdContext" }}
   <div class="d-flex flex-column flex-xl-row-reverse justify-content-between">
     {% if post.user.id == user.id %}
       <div class="col-xl-auto col-12 d-flex flex-column">
@@ -27,7 +30,7 @@
         <span class="text-muted post-date">{{ post.date }}</span>
       </div>
     </a>
-    <div class="text-center align-self-center mx-1 favicon" id="{{ post.id }}">
+    <div class="text-center align-self-center mx-1 favicon">
       {% if user.is_authenticated %}
         {% if is_fav %}
         <i id="favIconI" class="bi bi-star-fill selected fs-3 favicon"></i>
@@ -55,18 +58,28 @@
       <span class="text-center text-muted w-100" id="noTagsText">No tags added</span>
     {% endif %}
   </ul>
-  <div class="border-top">
-    <h5 class="py-3">Comments</h5>
-    <div class="card p-3">
+  <div class="border-top" id="{{ post.id }}">
+    <h5 class="py-3 m-0">Comments</h5>
+
+    <textarea name="comment" id="commentInput" class="form-control mb-2 main-shadow" 
+              cols="30" rows="3" placeholder="Comment here..."></textarea>
+    <button class="btn btn-main mb-3 d-block w-100" id="commentBtn">Comment</button>
+
+    <div id="commentsBlock" class="card p-3 {% if not comments %}bg-light{% endif %}">
+      <p 
+        class="text-center w-100 fs-5 display-5 p-0 m-0 {% if post.comments %}d-none{% endif %}"
+      >
+        No comments yet.
+      </p>
       {% for comment in post.comments %}
         <div
           class="d-flex justify-content-start align-items-center link-container"
         >
           <div class="d-flex flex-column align-items-center justify-content-center text-center">
             {% if comment.profile %}
-              <img src="{{ comment.profile.avatar.url }}" alt="author-avatar" class="author-avatar mx-auto" /> 
+              <img src="{{ comment.profile.avatar.url }}" alt="comment-avatar" class="author-avatar mx-auto" /> 
             {% else %}
-              <img src="{{ default_avatar }}" alt="author-avatar" class="author-avatar" /> 
+              <img src="{{ default_avatar }}" alt="comment-avatar" class="author-avatar" /> 
             {% endif %}
             <p class="display-5 fs-5">
               {{ comment.user.username }}

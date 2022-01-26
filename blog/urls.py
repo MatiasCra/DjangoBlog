@@ -16,4 +16,5 @@ urlpatterns = [
     path(
         "post/favourite/<int:post_id>", views.toggle_favourite, name="ToggleFavourite"
     ),
+    path("post/comment/<int:post_id>", views.make_comment, name="MakeComment"),
 ]

@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.core.exceptions import ObjectDoesNotExist
@@ -57,7 +58,7 @@ class Post(models.Model):
 
     def comments(self):
         try:
-            return Comment.objects.filter(post=self.id)
+            return Comment.objects.filter(post=self.id).order_by("-timestamp")
         except ObjectDoesNotExist:
             return None
 
@@ -110,6 +111,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     post = models.ForeignKey(Post, on_delete=CASCADE)
     content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def profile(self):
         try:

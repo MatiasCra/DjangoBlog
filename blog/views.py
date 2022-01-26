@@ -7,8 +7,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import Profile
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
-from .models import Category, Post, Tag, Favourite
+from .models import Category, Comment, Post, Tag, Favourite
 from django.http import HttpResponse, HttpResponseNotModified
+import json
 
 
 def index(request):
@@ -102,6 +103,7 @@ def get_post(request, post_id):
     tags = post.tags.all()
     author_avatar_url = Profile.avatar_url(post.user)
     is_fav = Favourite.is_favourited(user_id=request.user.id, post_id=post_id)
+    user_avatar = Profile.avatar_url(request.user)
     return render(
         request,
         "blog/post.html",
@@ -111,6 +113,7 @@ def get_post(request, post_id):
             "is_fav": is_fav,
             "tags": tags,
             "avatar": author_avatar_url,
+            "user_avatar": user_avatar,
         },
     )
 
@@ -301,3 +304,16 @@ def toggle_favourite(request, post_id):
         pass
 
     return HttpResponseNotModified()
+
+
+@user_passes_test(lambda user: user.is_authenticated)
+def make_comment(request, post_id):
+    body = json.loads(request.body)
+    print("Body:", body)
+    content = body["content"]
+    print("Content:", content)
+    comment = Comment(
+        content=content, user=request.user, post=Post.objects.get(id=post_id)
+    )
+    comment.save()
+    return HttpResponse()

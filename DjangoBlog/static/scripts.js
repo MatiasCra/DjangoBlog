@@ -123,7 +123,9 @@ if (favIconI) {
     favIconI.classList.toggle("bi-star-fill");
 
     const csrftoken = getCookie("csrftoken");
-    postId = favIconI.parentElement.id;
+    const postId = JSON.parse(
+      document.getElementById("postIdContext").textContent
+    );
 
     // Adds/removes from favourites from the db
     fetch("/blog/post/favourite/" + postId, {
@@ -177,22 +179,95 @@ if (tagsCheckLabels) {
   }
 
   // Change behaviour of enter key when foccused on the tag searchbar
-  tagSearchBar = document.getElementById("tagSearchBar")
+  tagSearchBar = document.getElementById("tagSearchBar");
   // Keydown ==> when press starts
   // Keyup ==> when press is released
-  tagSearchBar.addEventListener("keydown", (e) => {
-    // Number 13 is the "Enter" key on the keyboard
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      tagSearchBtn.click();
-    }
-  });
+  if (tagSearchBtn) {
+    tagSearchBar.addEventListener("keydown", (e) => {
+      // Number 13 is the "Enter" key on the keyboard
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        tagSearchBtn.click();
+      }
+    });
+  }
 
-  tagSearchDelete = document.getElementById("tagSearchDelete")
-  tagSearchDelete.addEventListener("click", (e) => {
-    e.preventDefault()
-    tagSearchBar.value = "";
-    tagSearchBtn.click();
-    tagSearchBar.focus();
-  })
+  tagSearchDelete = document.getElementById("tagSearchDelete");
+  if (tagSearchDelete) {
+    tagSearchDelete.addEventListener("click", (e) => {
+      e.preventDefault();
+      tagSearchBar.value = "";
+      tagSearchBtn.click();
+      tagSearchBar.focus();
+    });
+  }
+}
+
+// Add a comment
+commentBtn = document.getElementById("commentBtn");
+if (commentBtn) {
+  const addComment = (content) => {
+    const postId = JSON.parse(
+      document.getElementById("postIdContext").textContent
+    );
+    // Make request to create comment on DB
+    const csrftoken = getCookie("csrftoken");
+    fetch("/blog/post/comment/" + postId, {
+      headers: {
+        "X-CSRFToken": csrftoken,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ content: content }),
+    })
+      .then(function (res) {
+        console.log(res);
+      })
+      .catch(function (res) {
+        console.log(res);
+      });
+
+    // Add comment to list
+    // Comment div
+    commentContainer = document.createElement("div");
+    commentContainer.className =
+      "d-flex justify-content-start align-items-center link-container";
+    // User info div
+    userContainer = document.createElement("div");
+    userContainer.className =
+      "d-flex flex-column align-items-center justify-content-center text-center";
+    // Profile img
+    userImg = document.createElement("img");
+    userImg.alt = "comment-avatar";
+    userImg.src = JSON.parse(
+      document.getElementById("avatarContext").textContent
+    );
+    userImg.className = "author-avatar";
+    // Username
+    userP = document.createElement("p");
+    userP.className = "display-5 fs-5";
+    userP.innerHTML = JSON.parse(
+      document.getElementById("usernameContext").textContent
+    );
+    // Add user info to div
+    userContainer.appendChild(userImg);
+    userContainer.appendChild(userP);
+    // Comment content p
+    commentP = document.createElement("p");
+    commentP.className = "m-0 ms-3 p-2 card bg-light";
+    commentP.innerHTML = content;
+    // Add all comment info to div
+    commentContainer.appendChild(userContainer);
+    commentContainer.appendChild(commentP);
+    // Add comment to all comments div
+    commentBlock = document.getElementById("commentsBlock");
+    commentBlock.prepend(commentContainer);
+  };
+
+  commentBtn.addEventListener("click", () => {
+    commentInput = document.getElementById("commentInput");
+    content = commentInput.value;
+    addComment(content);
+  });
 }
