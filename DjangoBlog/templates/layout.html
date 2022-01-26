@@ -30,7 +30,7 @@
       crossorigin="anonymous"
     />
     <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles.css' %}?{% now 'U' %}" />
   </head>
   <body>
     <div class="d-flex flex-column" style="min-height: 100vh; position: relative;">

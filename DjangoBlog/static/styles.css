@@ -212,6 +212,11 @@ a.card {
     transition: background-color 100ms, border-color 100ms;
 }
 
+.tag-list-select {
+    max-height: 11.9em;
+    overflow: auto;
+}
+
 .tag-list-select > li {
     border: 0;
     padding: 0;
