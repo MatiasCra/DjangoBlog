@@ -97,3 +97,9 @@ class Favourite(models.Model):
 
     def __str__(self):
         return f"{self.user} <==> {self.post}"
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=CASCADE)
+    post = models.ForeignKey(Post, on_delete=CASCADE)
+    content = models.TextField()
