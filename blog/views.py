@@ -32,6 +32,42 @@ def favourites(request):
     )
 
 
+def search(request):
+    title = request.GET.get("title", None)
+    cat = request.GET.get("category")
+    tags = request.GET.getlist("tags")
+    if title is not None or cat is not None or tags:
+        posts = Post.objects.all()
+        if title:
+            posts = posts.filter(title__icontains=title)
+
+        if cat and cat != "-1":
+            posts = posts.filter(category=cat)
+
+        if tags:
+            posts_to_exclude = []
+            for post in posts:
+                if not post.has_all_tags(tags):
+                    posts_to_exclude.append(post.id)
+
+            posts = posts.exclude(id__in=posts_to_exclude)
+
+        no_posts_message = "No post found."
+        return render(
+            request,
+            "blog/index.html",
+            {"page": "Posts", "posts": posts, "no_posts_message": no_posts_message},
+        )
+    else:
+        categories = Category.objects.all()
+        tags = Tag.objects.all()
+        return render(
+            request,
+            "blog/search.html",
+            {"page": "Search", "categories": categories, "tags": tags},
+        )
+
+
 def categories(request):
     if request.method == "GET":
         category = request.GET.get("category")

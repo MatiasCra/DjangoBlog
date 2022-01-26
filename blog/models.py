@@ -54,6 +54,15 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def has_tag(self, tag_id: int):
+        return self.tags.filter(id=tag_id).count() > 0
+
+    def has_all_tags(self, tags_ids: list):
+        for tag in tags_ids:
+            if not self.has_tag(tag):
+                return False
+        return True
+
     class Meta:
         verbose_name = "post"
         verbose_name_plural = "posts"

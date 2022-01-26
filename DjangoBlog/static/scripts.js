@@ -123,7 +123,7 @@ if (favIconI) {
     favIconI.classList.toggle("bi-star-fill");
 
     const csrftoken = getCookie("csrftoken");
-    postId = favIconI.parentElement.id
+    postId = favIconI.parentElement.id;
 
     // Adds/removes from favourites from the db
     fetch("/blog/post/favourite/" + postId, {
@@ -140,5 +140,59 @@ if (favIconI) {
       .catch(function (res) {
         console.log(res);
       });
-   });
+  });
+}
+
+// For search page
+const tagsCheckLabels = document.getElementsByClassName("tagCheckBox");
+if (tagsCheckLabels) {
+  // Change (un)selected tag checkbox style
+  for (let index = 0; index < tagsCheckLabels.length; index++) {
+    const tagCheckLabel = tagsCheckLabels[index];
+    tagCheckLabel.addEventListener("click", () => {
+      tagCheckLabel.parentElement.classList.toggle("selected");
+    });
+  }
+
+  // Filter tags
+  const tagSearchBtn = document.getElementById("tagSearchBtn");
+  if (tagSearchBtn) {
+    tagSearchBtn.addEventListener("click", () => {
+      tagSearchText = document.getElementById("tagSearchBar").value;
+      for (let index = 0; index < tagsCheckLabels.length; index++) {
+        const tagCheckLabel = tagsCheckLabels[index];
+        if (!tagSearchText) {
+          tagCheckLabel.parentElement.classList.remove("d-none");
+        } else if (
+          !tagCheckLabel.innerHTML
+            .toLowerCase()
+            .includes(tagSearchText.toLowerCase())
+        ) {
+          tagCheckLabel.parentElement.classList.add("d-none");
+        } else {
+          tagCheckLabel.parentElement.classList.remove("d-none");
+        }
+      }
+    });
+  }
+
+  // Change behaviour of enter key when foccused on the tag searchbar
+  tagSearchBar = document.getElementById("tagSearchBar")
+  // Keydown ==> when press starts
+  // Keyup ==> when press is released
+  tagSearchBar.addEventListener("keydown", (e) => {
+    // Number 13 is the "Enter" key on the keyboard
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      tagSearchBtn.click();
+    }
+  });
+
+  tagSearchDelete = document.getElementById("tagSearchDelete")
+  tagSearchDelete.addEventListener("click", (e) => {
+    e.preventDefault()
+    tagSearchBar.value = "";
+    tagSearchBtn.click();
+    tagSearchBar.focus();
+  })
 }

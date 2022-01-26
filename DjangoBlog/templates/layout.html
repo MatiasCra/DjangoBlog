@@ -74,6 +74,15 @@
                   </a>
                 </li>
               {% endif %}
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if page == 'Search' %} active {% endif %}"
+                  aria-current="page"
+                  href="{% url 'Search' %}"
+                >
+                  Search
+                </a>
+              </li>
               {% if user.is_staff %}  
                 <li class="nav-item">
                   <a

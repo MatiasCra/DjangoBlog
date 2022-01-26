@@ -1,0 +1,44 @@
+{% extends 'layout.html' %} {% load static %} {% block content %}
+<h1 class="text-center">Search</h1>
+<form action="{% url 'Search' %}" method="get" class="my-form py-2">
+    <div class="search-container">
+        <input type="submit" value="Search" class="btn btn-outline-success ms-2">
+        <input
+          type="text"
+          name="title"
+          placeholder="Enter a post title..."
+          class="form-control"
+        />
+    </div>
+    <div class="d-flex flex-row align-items-center my-3">
+        <span class="me-2">Category: </span>
+        <select name="category" id="" class="form-select">
+            <option value="-1">Select a category...</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <span>Tags:</span>
+    <ul class="card bg-light mt-2 p-2 tag-list-select">
+        <div class="d-flex w-100 flex-row-reverse mx-1 mb-2 mt-1">
+            <input type="button" value="Filter" class="btn btn-outline-secondary" id="tagSearchBtn">
+            <button id="tagSearchDelete"><i class="bi bi-x text-muted"></i></button>
+            <input type="text" placeholder="Filter tag..." class="form-control" id="tagSearchBar">
+        </div>
+        {% for tag in tags %}
+            <li class="card my-1" id="{{ tag.id }}">
+                <input 
+                  type="checkbox" 
+                  name="tags" 
+                  class="btn-check" 
+                  id="btn-check{{ tag.id }}" 
+                  autocomplete="off"
+                  value="{{ tag.id }}"
+                >
+                <label class="btn w-100 m-0 py-1 px-2 tagCheckBox" for="btn-check{{ tag.id }}">{{ tag.name }}</label>
+            </li>
+        {% endfor %}
+    </ul>
+</form>
+{% endblock content %}

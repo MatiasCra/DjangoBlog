@@ -187,7 +187,7 @@ a.card {
     box-shadow: 0 0 0 4px rgba(121, 82, 179, .25);
 }
 
-.tag-list, .tag-list-ro {
+.tag-list, .tag-list-ro, .tag-list-select {
     min-height: 1em;
     list-style: none;
     display: flex;
@@ -195,7 +195,7 @@ a.card {
     flex-wrap: wrap;
 }
 
-.tag-list > li, .tag-list-ro > li{
+.tag-list > li, .tag-list-ro > li, .tag-list-select > li {
     margin: 0 .2rem;
     transition: background-color 100ms;
     width: fit-content;
@@ -205,6 +205,25 @@ a.card {
     text-decoration: line-through;
     cursor: pointer;
     background-color: rgba(0, 0, 0, .1);
+}
+
+.tag-list-select > li > * {
+    box-shadow: none !important;
+    transition: background-color 100ms, border-color 100ms;
+}
+
+.tag-list-select > li {
+    border: 0;
+    padding: 0;
+}
+
+.tag-list-select > li > label {
+    border: rgba(0, 0, 0, .1) 1px solid;
+}
+
+.tag-list-select > li.selected > label {
+    background-color: rgba(0, 0, 0, .1);
+    border-color: transparent; 
 }
 
 .favicon {
@@ -217,4 +236,27 @@ a.card {
 
 .favicon.selected {
     color: var(--secondary-color);
+}
+
+.search-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.search-container > input[type=button] {
+    width: fit-content;
+}
+
+#tagSearchDelete {
+    background-color: transparent;
+    border: none;
+    transform: translateX(-1.5rem);
+    width: .5rem;
+    padding: 0;
+    margin: 0;
+}
+
+#tagSearchDelete * {
+    border: none;
 }
