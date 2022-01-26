@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 from django.core.exceptions import ObjectDoesNotExist
+from accounts.models import Profile
 
 
 class Category(models.Model):
@@ -103,3 +104,9 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     post = models.ForeignKey(Post, on_delete=CASCADE)
     content = models.TextField()
+
+    def profile(self):
+        try:
+            return Profile.objects.get(user=self.user)
+        except ObjectDoesNotExist:
+            return None
