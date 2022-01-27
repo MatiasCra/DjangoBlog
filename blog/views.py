@@ -14,7 +14,11 @@ import json
 
 def index(request):
     posts = Post.objects.all().order_by("-date")
-    return render(request, "blog/index.html", {"page": "Blog", "posts": posts})
+    return render(
+        request,
+        "blog/index.html",
+        {"page": "Blog", "posts": posts},
+    )
 
 
 @user_passes_test(lambda user: user.is_authenticated)
@@ -87,7 +91,7 @@ def categories(request):
 
 def myposts(request):
     posts = Post.objects.filter(user=request.user.id).order_by("-date")
-    return render(request, "blog/myposts.html", {"page": "My Posts", "posts": posts})
+    return render(request, "blog/index.html", {"page": "My Posts", "posts": posts})
 
 
 def delete_success(request):
@@ -103,7 +107,10 @@ def get_post(request, post_id):
     tags = post.tags.all()
     author_avatar_url = Profile.avatar_url(post.user)
     is_fav = Favourite.is_favourited(user_id=request.user.id, post_id=post_id)
-    user_avatar = Profile.avatar_url(request.user)
+    if request.user.is_authenticated:
+        user_avatar = Profile.avatar_url(request.user)
+    else:
+        user_avatar = None
     return render(
         request,
         "blog/post.html",
@@ -309,11 +316,12 @@ def toggle_favourite(request, post_id):
 @user_passes_test(lambda user: user.is_authenticated)
 def make_comment(request, post_id):
     body = json.loads(request.body)
-    print("Body:", body)
     content = body["content"]
-    print("Content:", content)
-    comment = Comment(
-        content=content, user=request.user, post=Post.objects.get(id=post_id)
-    )
-    comment.save()
-    return HttpResponse()
+    if not content.isspace() and content != "":
+        comment = Comment(
+            content=content, user=request.user, post=Post.objects.get(id=post_id)
+        )
+        comment.save()
+        return HttpResponse()
+    else:
+        return HttpResponseNotModified()

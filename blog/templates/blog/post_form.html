@@ -1,14 +1,20 @@
-{% extends 'layout.html' %} {% block content %}
-<h1 class="text-center mb-3">{{ action_title }}</h1>
+{% extends 'layout.html' %}
+
+{% block header %}
+<div class="bg-dark o-98 p-0 m-0">
+    <h1 class="mb-5 mt-4 py-5 text-center text-white" style="font-size: 4rem;">{{ action_title }}</h1>
+</div>
+{% endblock header %}
+
+{% block content %}
 <form
   method="post"
   action="{% if page == 'Create post' %}{% url 'Create' %}{% else %}{% url 'Update' post_id %}{% endif %}"
-  class="my-form"
+  class="my-form col-xl-7 col-md-9 col-11 mx-auto mb-3"
   id="postForm"
   enctype="multipart/form-data"
 >
   {{ form.errors }} {% csrf_token %} {{ form.media }} {{ form.as_p }}
-
   <span>Tags:</span>
   <ul id="tagList" class="card bg-light mt-2 p-2 tag-list">
     <span class="text-center text-muted w-100 {% if post_tags %} d-none {% endif %}"

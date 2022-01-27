@@ -1,17 +1,26 @@
 {% extends 'layout.html' %}
+{% block header %}
+<div class="bg-dark o-98 p-0 m-0">
+    <h1 class="mb-5 mt-4 py-5 text-center text-white" style="font-size: 4rem;">{{ page }}</h1>
+</div>
+{% endblock header %}
 {% block content %}
-    <h1 class="text-center">Categories</h1>
     <div class="row my-3">
-        <div class="col card bg-light">
-            <ul class="d-flex ps-0 py-2 mb-0 flex-column align-items-center text-center my-list">
+        <div class="col card p-0 mx-2 border-dark bg-light">
+            <ul class="d-flex flex-column align-items-center text-center my-list p-0 m-0">
                 {% for cat in categories %}
-                    <li class="d-block py-2 border-bottom w-100">
-                        <a href="{% url 'Categories' %}?category={{ cat.id }}" class="my-link d-block">
+                    <li class="d-block py-2 w-100 cat-li border-bottom">
+                        <a href="{% url 'Categories' %}?category={{ cat.id }}" class="cat-link d-block">
                             {{ cat }}
                         </a>
                     </li>
                 {% endfor %}    
-            </ul>        
+            </ul>
+            
+            {% for cat in Category.objects.all %}
+                <span>{{cat}}</span>
+            {% endfor %}
+                   
         </div>
     </div>
 {% endblock content %}

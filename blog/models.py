@@ -71,6 +71,22 @@ class Post(models.Model):
                 return False
         return True
 
+    def author_avatar(self):
+        return Profile.avatar_url(self.user)
+
+    @classmethod
+    @staticmethod
+    def post_with_most_comments():
+        posts = Post.objects.all()
+        max_amount = 0
+        max_comments_post = None
+        for post in posts:
+            if (ammount := post.comments().count()) >= max_amount:
+                max_amount = ammount
+                max_comments_post = post
+        print(f"The post with the most comments is: {max_comments_post}")
+        return max_comments_post
+
     class Meta:
         verbose_name = "post"
         verbose_name_plural = "posts"

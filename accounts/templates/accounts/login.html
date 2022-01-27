@@ -1,7 +1,12 @@
-{% extends 'layout.html' %} {% block content %}
-<h1 class="text-center mb-3">Login</h1>
-<form action="{% url 'Login' %}" method="post" class="my-form col-md-8 mx-auto">
-  {{ form.errors }} {% csrf_token %} {{ form.as_p }}
-  <input type="submit" value="Login" class="btn btn-main w-100" />
-</form>
+{% extends 'layout.html' %} 
+{% block pageclass %}bg-login bg-full{% endblock pageclass %}
+{% block content %}
+<div class="card col-xl-4 col-lg-6 col-md-8 p-5 align-self-center bg-dark text-white m-login">
+  <h1 class="text-center mb-3 py-3">LOG IN</h1>
+  <form action="{% url 'Login' %}" method="post" class="my-form">
+    {{ form.errors }} {% csrf_token %} {{ form.as_p }}
+    <span class="me-2">You don't have an account?</span><a href="{% url 'Signup' %}">Sing up here.</a>
+    <input type="submit" value="Login" class="btn btn-main w-100 mt-3" />
+  </form>
+</div>
 {% endblock content %}

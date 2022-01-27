@@ -67,10 +67,11 @@ const filterCollectionByValue = (collection, val) => {
   return false;
 };
 
+const isEmpty = (text) => !text.trim().length;
+
 const isValidTag = (tag) => {
-  isEmpty = !tag.trim().length;
   isNumeric = !isNaN(tag) || !isNaN(parseFloat(tag));
-  return !isEmpty && !isNumeric;
+  return !isEmpty(tag) && !isNumeric;
 };
 
 // Add tag entered to the list
@@ -232,18 +233,18 @@ if (commentBtn) {
     // Comment div
     commentContainer = document.createElement("div");
     commentContainer.className =
-      "d-flex justify-content-start align-items-center link-container";
+      "d-flex justify-content-start align-items-center";
     // User info div
     userContainer = document.createElement("div");
     userContainer.className =
-      "d-flex flex-column align-items-center justify-content-center text-center";
+      "d-flex flex-column align-items-center justify-content-center text-center mb-2";
     // Profile img
     userImg = document.createElement("img");
     userImg.alt = "comment-avatar";
     userImg.src = JSON.parse(
       document.getElementById("avatarContext").textContent
     );
-    userImg.className = "author-avatar";
+    userImg.className = "comment-avatar mx-auto";
     // Username
     userP = document.createElement("p");
     userP.className = "display-5 fs-5";
@@ -253,21 +254,31 @@ if (commentBtn) {
     // Add user info to div
     userContainer.appendChild(userImg);
     userContainer.appendChild(userP);
-    // Comment content p
-    commentP = document.createElement("p");
-    commentP.className = "m-0 ms-3 p-2 card bg-light";
-    commentP.innerHTML = content;
+    // Comment content div
+    commentDiv = document.createElement("div");
+    commentDiv.className = "m-0 ms-3 px-2 w-100 align-self-start h5 fw-normal break-all";
+    commentDiv.innerHTML = content;
     // Add all comment info to div
     commentContainer.appendChild(userContainer);
-    commentContainer.appendChild(commentP);
+    commentContainer.appendChild(commentDiv);
+
     // Add comment to all comments div
     commentBlock = document.getElementById("commentsBlock");
+    // If there where no comments, remove the 'no comments' stuff
+    const noCommentsP = document.getElementById("noCommentsP");
+    if (!noCommentsP.classList.contains("d-block")) {
+      noCommentsP.classList.add("d-block");
+      commentBlock.classList.remove("card");
+      commentBlock.classList.remove("bg-light");
+    }
     commentBlock.prepend(commentContainer);
   };
 
   commentBtn.addEventListener("click", () => {
     commentInput = document.getElementById("commentInput");
     content = commentInput.value;
-    addComment(content);
+    if(!isEmpty(content)){
+      addComment(content);
+    }
   });
 }

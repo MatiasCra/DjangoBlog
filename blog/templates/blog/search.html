@@ -1,6 +1,12 @@
-{% extends 'layout.html' %} {% load static %} {% block content %}
-<h1 class="text-center">Search</h1>
-<form action="{% url 'Search' %}" method="get" class="my-form py-2">
+{% extends 'layout.html' %}
+{% load static %}
+{% block header %}
+<div class="bg-dark o-98 p-0 m-0">
+    <h1 class="mb-5 mt-4 py-5 text-center text-white" style="font-size: 4rem;">{{ page }}</h1>
+</div>
+{% endblock header %}
+{% block content %}
+<form action="{% url 'Search' %}" method="get" class="my-form py-2 col-xl-7 col-md-9 col-11 mx-auto">
     <div class="search-container">
         <input type="submit" value="Search" class="btn btn-outline-success ms-2">
         <input
