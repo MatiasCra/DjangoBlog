@@ -10,9 +10,17 @@ def contact(request):
         if form.is_valid():
             form.save()
             email_subject = f'New contact {form.cleaned_data["email"]}: {form.cleaned_data["subject"]}'
-            email_message = form.cleaned_data['message']
-            send_mail(email_subject, email_message, settings.CONTACT_EMAIL, settings.ADMIN_EMAILS)
+            email_message = form.cleaned_data["message"]
+            send_mail(
+                email_subject,
+                email_message,
+                settings.CONTACT_EMAIL,
+                settings.ADMIN_EMAILS,
+            )
             return render(request, "contact/success.html", {"page": "Contact Success"})
 
-    form = ContactForm()
+    if request.user.is_authenticated:
+        form = ContactForm(initial={"email": request.user.email})
+    else:
+        form = ContactForm()
     return render(request, "contact/contact.html", {"form": form, "page": "Contact"})
