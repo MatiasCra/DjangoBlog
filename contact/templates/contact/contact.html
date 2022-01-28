@@ -1,0 +1,10 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="col-xl-7 col-md-9 col-11 mx-auto">
+    <h1>Contact</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Send" class="btn mb-3 btn-main px-3 py-2">
+    </form>
+</div>
+{% endblock content %}

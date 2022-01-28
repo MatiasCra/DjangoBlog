@@ -1,3 +1,4 @@
 db.sqlite3
 media/images/**
 media/profiles/**
+contact_form/.env

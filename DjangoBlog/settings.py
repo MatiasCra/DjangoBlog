@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "DjangoBlog",
     "blog",
     "accounts",
+    "contact",
 ]
 
 MIDDLEWARE = [

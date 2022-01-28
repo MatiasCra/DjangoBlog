@@ -17,14 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("accounts.urls")),
     path('', lambda req: redirect("Home")),
+    path('about/', lambda req: render(req, "about.html"), name="About"),
     path('blog/', include("blog.urls")),
+    path('contact/', include("contact.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
