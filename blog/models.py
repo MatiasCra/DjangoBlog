@@ -84,7 +84,6 @@ class Post(models.Model):
             if (ammount := post.comments().count()) >= max_amount:
                 max_amount = ammount
                 max_comments_post = post
-        print(f"The post with the most comments is: {max_comments_post}")
         return max_comments_post
 
     class Meta:
