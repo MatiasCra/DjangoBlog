@@ -10,6 +10,15 @@
   --bootstrap-primary-color: #0d6efd;
 }
 
+.wrapper {
+  min-height: 100vh;
+}
+
+.post-img {
+  height: 30rem;
+  object-fit: cover;
+}
+
 .bg-login {
   background-image: url(./images/login-bg.jpg);
 }
@@ -378,7 +387,7 @@ a.card {
 }
 
 .username {
-  color: white;
+  color: rgba(255, 255, 255, .8);
   padding: 0;
   margin-bottom: 0;
   margin: 0 .4em;

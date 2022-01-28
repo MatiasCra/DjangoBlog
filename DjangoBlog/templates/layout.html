@@ -33,10 +33,10 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}?{% now 'U' %}" />
   </head>
   <body>
-    <div class="d-flex flex-column {% block pageclass %}{% endblock pageclass %}" style="min-height: 100vh; position: relative;">
+    <div class="d-flex flex-column {% block pageclass %}{% endblock pageclass %} wrapper">
       <!-- Navigation-->
-      <nav class="navbar navbar-expand-lg navbar-dark static-top bg-dark 
-                 {% if not user_avatar %}py-3{% else %}py-lg-0{% endif %}">
+      <nav class="w-100 navbar navbar-expand-lg navbar-dark static-top bg-dark 
+                  {% if not user_avatar %}py-3{% else %}py-lg-0{% endif %}">
         <div class="container col-lg-10 align-items-center">
           <a class="navbar-brand" href="{% url 'Home' %}">Start</a>
           <button
@@ -124,8 +124,8 @@
               {% else %}
               <li class="nav-item dropdown d-flex">
                 <a class="d-flex flex-row-reverse flex-lg-row align-items-center nav-link dropdown-toggle profile-dropdown my-2 my-lg-2 p-0" 
-                   href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <p class="username">{{ user }}</p>
+                    href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <p class="username fw-light">{{ user }}</p>
                   <img src="{{ user_avatar }}" alt="user avatar">
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">

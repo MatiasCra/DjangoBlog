@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block header %}
-<div class="bg-dark o-98 p-0 m-0">
-    <img src="{{ post.image.url }}" alt="post" class="w-100" style="max-height: 30rem; object-fit: cover;" />
-</div>
+  <div class="bg-dark o-98 p-0 m-0 overflow-hidden w-100 post-img-container">
+      <img src="{{ post.image.url }}" alt="post" class="w-100 background post-img" />
+  </div>
 {% endblock header %}
 
 {% block content %}
