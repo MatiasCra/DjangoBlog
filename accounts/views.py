@@ -36,11 +36,13 @@ def log_in(request):
             if user_by_mail is not None:
                 login(request, user_by_mail)
                 return redirect("Home")
+            else:
+                errors = "Username or password are incorrect."
 
         return render(
             request,
             "accounts/login.html",
-            {"form": form, "page": "Log in"},
+            {"form": form, "page": "Log in", "errors": errors},
         )
 
 
