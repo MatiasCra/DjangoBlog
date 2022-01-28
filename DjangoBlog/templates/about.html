@@ -1,5 +1,42 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="col-xl-7 col-md-9 col-11 mx-auto">
     <h1>About</h1>
+    <p>
+        Hey, I'm Matías a software developer and I can make websites 
+        like this one. I'm a Computer Science student at the University 
+        of Buenos Aires and I'm exited to continue learning about tech and 
+        software.
+    </p>
+    <h3>
+        Need a developer? 
+        Contact me or 
+        <a href="{% url 'Contact' %}" class="my-link">make an inquiry.</a>
+    </h3>
+    <div class="my-2">
+        Mail: 
+        <a href="mailto: cravchikm@gmail.com"
+           class="color-main my-link"
+        >
+            cravchikm@gmail.com
+        </a>
+    </div>
+    <div class="my-2">
+        Linkedin: 
+        <a href="https://www.linkedin.com/in/matias-cravchik-9287991a3/"
+           class="color-main my-link"
+           target="_blank"  
+        >
+            https://www.linkedin.com/in/matias-cravchik-9287991a3/
+        </a>
+    </div>    
+    <div class="my-2">
+        Github: 
+        <a href="https://github.com/MatiasCra"
+           class="color-main my-link"
+           target="_blank"  
+        >
+            https://github.com/MatiasCra
+        </a>
+    </div>
 </div>
 {% endblock content %}

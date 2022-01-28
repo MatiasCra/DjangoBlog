@@ -21,12 +21,24 @@ from django.shortcuts import redirect, render
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include("accounts.urls")),
-    path('', lambda req: redirect("Home")),
-    path('about/', lambda req: render(req, "about.html"), name="About"),
-    path('blog/', include("blog.urls")),
-    path('contact/', include("contact.urls")),
+    path("admin/", admin.site.urls),
+    path("", include("accounts.urls")),
+    path("", lambda req: redirect("Home")),
+    path(
+        "about/", lambda req: render(req, "about.html", {"page": "About"}), name="About"
+    ),
+    path(
+        "terms_of_use/",
+        lambda req: render(req, "lorem.html", {"page": "Terms of Use"}),
+        name="Terms",
+    ),
+    path(
+        "privacy_policy/",
+        lambda req: render(req, "lorem.html", {"page": "Privacy Policy"}),
+        name="PrivacyPolicy",
+    ),
+    path("blog/", include("blog.urls")),
+    path("contact/", include("contact.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
