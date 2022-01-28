@@ -1,4 +1,8 @@
 db.sqlite3
-media/images/**
-media/profiles/**
+media/images/**.png
+media/images/**.jpg
+
+media/profiles/**.png
+media/profiles/**.jpg
+
 **.env
