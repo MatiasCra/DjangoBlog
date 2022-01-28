@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
@@ -11,6 +11,8 @@ from .forms import LoginForm, SignupForm, ProfileForm
 
 
 def log_in(request):
+    if request.user.is_authenticated:
+        return redirect("Home")
     if request.method == "GET":
         form = LoginForm()
         return render(request, "accounts/login.html", {"form": form, "page": "Log in"})
@@ -43,7 +45,10 @@ def log_in(request):
 
 
 def sign_up(request):
+    if request.user.is_authenticated:
+        return redirect("Home")
     if request.method == "GET":
+
         form = SignupForm()
         return render(
             request, "accounts/signup.html", {"form": form, "page": "Sign up"}
@@ -78,7 +83,10 @@ class ProfileView(DetailView):
         return context
 
 
+@login_required
 def update_profile(request, user_id):
+    if request.user.id != user_id:
+        return redirect("Login")
     profile = Profile.objects.get(user=user_id)
     user = User.objects.get(id=user_id)
     if request.method == "GET":
