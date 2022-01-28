@@ -10,6 +10,7 @@
 <div class="col-xl-10 col-11 mx-auto">
   <div class="post-info">
     {{ user.username|json_script:"usernameContext" }}
+    {{ user.id|json_script:"userIdContext" }}
     {{ user_avatar|json_script:"avatarContext" }}
     {{ post.id|json_script:"postIdContext" }}
     <div class="d-flex flex-column flex-xl-row-reverse justify-content-between">
@@ -85,7 +86,10 @@
           <div
             class="d-flex justify-content-start align-items-center"
           >
-            <div class="d-flex flex-column align-items-center justify-content-center text-center mb-2">
+            <a 
+              class="d-flex flex-column align-items-center justify-content-center text-center mb-2 comment-user"
+              href="{% url 'Profile' comment.user.id %}"
+            >
               {% if comment.profile %}
                 <img src="{{ comment.profile.avatar.url }}" alt="comment-avatar" class="comment-avatar mx-auto" /> 
               {% else %}
@@ -94,7 +98,7 @@
               <p class="display-5 fs-5">
                 {{ comment.user.username }}
               </p>
-            </div>
+            </a>
             <div class="m-0 ms-3 p-2 w-100 align-self-start h5 fw-normal break-all">
               {{ comment.content }} 
             </div>

@@ -107,10 +107,6 @@ def get_post(request, post_id):
     tags = post.tags.all()
     author_avatar_url = Profile.avatar_url(post.user)
     is_fav = Favourite.is_favourited(user_id=request.user.id, post_id=post_id)
-    if request.user.is_authenticated:
-        user_avatar = Profile.avatar_url(request.user)
-    else:
-        user_avatar = None
     return render(
         request,
         "blog/post.html",
@@ -120,29 +116,8 @@ def get_post(request, post_id):
             "is_fav": is_fav,
             "tags": tags,
             "avatar": author_avatar_url,
-            "user_avatar": user_avatar,
         },
     )
-
-
-class UpdatePost(UserPassesTestMixin, UpdateView):
-    model = Post
-    form_class = Post
-    success_url = "/pages/"
-
-    def test_func(self):
-        post = Post.objects.get(id=self.kwargs["pk"])
-        return (
-            self.request.user.is_authenticated and self.request.user.id == post.user.id
-        )
-
-    def get_context_data(self, **kwargs):
-        context = super(UpdateView, self).get_context_data(**kwargs)
-        avatar = Profile.avatar_url(self.request.user.id)
-        context["avatar"] = avatar
-        context["page"] = "Edit post"
-        context["action_title"] = "Edit post"
-        return context
 
 
 @user_passes_test(lambda user: user.is_authenticated)
@@ -288,8 +263,6 @@ class DeletePost(UserPassesTestMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super(DeleteView, self).get_context_data(**kwargs)
-        avatar = Profile.avatar_url(self.request.user.id)
-        context["avatar"] = avatar
         context["page"] = "Delete post"
         context["post"] = self.object.title
         return context

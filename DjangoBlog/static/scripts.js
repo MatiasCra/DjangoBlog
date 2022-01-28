@@ -234,10 +234,12 @@ if (commentBtn) {
     commentContainer = document.createElement("div");
     commentContainer.className =
       "d-flex justify-content-start align-items-center";
-    // User info div
-    userContainer = document.createElement("div");
+    // User info a
+    userContainer = document.createElement("a");
     userContainer.className =
-      "d-flex flex-column align-items-center justify-content-center text-center mb-2";
+      "d-flex flex-column align-items-center justify-content-center text-center mb-2 comment-user";
+    userId = document.getElementById("userIdContext").textContent;
+    userContainer.href = "/profile/" + userId;
     // Profile img
     userImg = document.createElement("img");
     userImg.alt = "comment-avatar";
@@ -256,7 +258,8 @@ if (commentBtn) {
     userContainer.appendChild(userP);
     // Comment content div
     commentDiv = document.createElement("div");
-    commentDiv.className = "m-0 ms-3 px-2 w-100 align-self-start h5 fw-normal break-all";
+    commentDiv.className =
+      "m-0 ms-3 px-2 w-100 align-self-start h5 fw-normal break-all";
     commentDiv.innerHTML = content;
     // Add all comment info to div
     commentContainer.appendChild(userContainer);
@@ -266,8 +269,8 @@ if (commentBtn) {
     commentBlock = document.getElementById("commentsBlock");
     // If there where no comments, remove the 'no comments' stuff
     const noCommentsP = document.getElementById("noCommentsP");
-    if (!noCommentsP.classList.contains("d-block")) {
-      noCommentsP.classList.add("d-block");
+    if (!noCommentsP.classList.contains("d-none")) {
+      noCommentsP.classList.add("d-none");
       commentBlock.classList.remove("card");
       commentBlock.classList.remove("bg-light");
     }
@@ -277,8 +280,9 @@ if (commentBtn) {
   commentBtn.addEventListener("click", () => {
     commentInput = document.getElementById("commentInput");
     content = commentInput.value;
-    if(!isEmpty(content)){
+    if (!isEmpty(content)) {
       addComment(content);
     }
+    commentInput.value = "";
   });
 }

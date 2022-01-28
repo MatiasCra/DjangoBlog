@@ -64,6 +64,20 @@
   border-color: rgba(0, 0, 0, 0.4) !important;
 }
 
+.profile-dropdown::after {
+  position: absolute;
+  opacity: 0;
+}
+
+.profile-dropdown > img {
+  background-color: white;
+  border-radius: 4rem;
+  outline: 2px black thin;
+  outline-offset: -1px;
+  width: 3.5rem;
+  aspect-ratio: 1;
+}
+
 .my-list {
   list-style: none;
 }
@@ -340,8 +354,19 @@ a.card {
 
 .comment-avatar {
   width: 6rem;
+  aspect-ratio: 1;
   margin-bottom: 1rem;
   border-radius: 100%;
+}
+
+.comment-user {
+  color: inherit;
+  text-decoration: none;
+}
+
+.comment-user:hover {
+  text-decoration: none;
+  color: inherit;
 }
 
 .break-all {
@@ -350,4 +375,13 @@ a.card {
 
 .m-login {
   margin-top: 4rem;
+}
+
+.username {
+  color: white;
+  padding: 0;
+  margin-bottom: 0;
+  margin: 0 .4em;
+  font-size: 1.3em;
+  height: fit-content;
 }

@@ -1,6 +1,13 @@
-{% extends 'layout.html' %} {% block content %}
-<div class="row my-3 d-flex flex-row">
-  <h1 class="text-center">Edit profile</h1>
+{% extends 'layout.html' %}
+{% block header %}
+<div class="bg-dark o-98 p-0 m-0">
+    <h1 class="mb-5 mt-4 py-5 text-center text-white" style="font-size: 4rem;">
+      Edit profile
+    </h1>
+</div>
+{% endblock header %}
+{% block content %}
+<div class="row d-flex flex-row col-xl-7 col-md-9 col-11 mx-auto mb-3">
   <form
     action="{% url 'EditProfile' user_id %}"
     method="post"
