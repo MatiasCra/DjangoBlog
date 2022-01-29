@@ -17,4 +17,8 @@ urlpatterns = [
         "post/favourite/<int:post_id>", views.toggle_favourite, name="ToggleFavourite"
     ),
     path("post/comment/<int:post_id>", views.make_comment, name="MakeComment"),
+    path("category/create/", views.CreateCategory.as_view(), name="CreateCategory"),
+    path("category/edit/<int:pk>", views.EditCategory.as_view(), name="EditCategory"),
+    path("category/delete/<int:pk>", views.DeleteCategory.as_view(), name="DeleteCategory"),
+    path("category/delete_success/", views.category_delete_success, name="DeleteCategory"),
 ]

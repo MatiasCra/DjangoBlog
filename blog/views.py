@@ -1,7 +1,7 @@
 from sqlite3 import IntegrityError
 from django.shortcuts import render, redirect
-from .forms import PostForm
-from django.views.generic.edit import DeleteView
+from .forms import CategoryForm, PostForm
+from django.views.generic.edit import DeleteView, CreateView, UpdateView
 from django.core.exceptions import ObjectDoesNotExist
 
 from accounts.models import Profile
@@ -176,7 +176,15 @@ def delete_success(request):
     return render(
         request,
         "blog/post_delete_success.html",
-        {"page": "Post deleted"},
+        {"page": "Post Deleted"},
+    )
+
+
+def category_delete_success(request):
+    return render(
+        request,
+        "blog/category_delete_success.html",
+        {"page": "Category Deleted"},
     )
 
 
@@ -376,3 +384,44 @@ def make_comment(request, post_id):
         return HttpResponse()
     else:
         return HttpResponseNotModified()
+
+
+class CreateCategory(UserPassesTestMixin, CreateView):
+    model = Category
+    form_class = CategoryForm
+    success_url = "/blog/categories/"
+
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateView, self).get_context_data(**kwargs)
+        context["page"] = "Create Category"
+        return context
+
+
+class EditCategory(UpdateView):
+    model = Category
+    form_class = CategoryForm
+    success_url = "/blog/categories/"
+
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateView, self).get_context_data(**kwargs)
+        context["page"] = "Edit Category"
+        return context
+
+
+class DeleteCategory(UserPassesTestMixin, DeleteView):
+    model = Category
+    success_url = "/blog/category/delete_success/"
+
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super(DeleteView, self).get_context_data(**kwargs)
+        context["page"] = "Delete Category"
+        return context

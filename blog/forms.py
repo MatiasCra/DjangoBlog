@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Category
 
 
 class PostForm(forms.ModelForm):
@@ -16,4 +16,13 @@ class PostForm(forms.ModelForm):
             "category": forms.Select(attrs={"class": "form-select"}),
             "user": forms.HiddenInput(),
             "tags": forms.HiddenInput(),
+        }
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ("name",)
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "form-control"}),
         }
