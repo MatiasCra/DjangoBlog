@@ -4,15 +4,17 @@
         <div class="col-4 col-lg-3 align-self-center">
             <img src="{{ profile.avatar.url }}" alt="avatar" class="profile-avatar">
         </div>
-        <div class="align-self-center d-flex flex-column fit-content h-100">
-            <p class="display-4 h6">{{ profile.user.username }}</p>
-            {% if profile.user.is_staff %}
-                <p class="lead">Administrator</p>
+        <div class="col-8 col-lg-9 d-flex flex-row">
+            <div class="align-self-center d-flex flex-column fit-content h-100">
+                <p class="display-4 h6">{{ profile.user.username }}</p>
+                {% if profile.user.is_staff %}
+                    <p class="lead">Administrator</p>
+                {% endif %}
+            </div>
+            {% if profile.user.id == user.id %}
+                <a href="{% url 'EditProfile' user.id %}" class="btn secondary-btn ms-auto px-3" style="height: max-content;">Edit</a>
             {% endif %}
         </div>
-        {% if profile.user.id == user.id %}
-            <a href="{% url 'EditProfile' user.id %}" class="btn secondary-btn ms-auto px-3">Edit</a>
-        {% endif %}
     </div>
     <div class="mt-4 ms-3">
         <p class="h5 mb-3">Email: 
