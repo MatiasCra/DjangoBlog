@@ -1,7 +1,7 @@
 from sqlite3 import IntegrityError
 from django.shortcuts import render, redirect
 from .forms import PostForm
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import DeleteView
 from django.core.exceptions import ObjectDoesNotExist
 
 from accounts.models import Profile
@@ -10,30 +10,57 @@ from django.contrib.auth.decorators import user_passes_test
 from .models import Category, Comment, Post, Tag, Favourite
 from django.http import HttpResponse, HttpResponseNotModified
 import json
+from django.core.paginator import Paginator, EmptyPage
+
+POSTS_PER_PAGE = 12
 
 
 def index(request):
-    posts = Post.objects.all().order_by("-date")
+    posts_queryset = Post.objects.all().order_by("-date")
+    posts_paginator = Paginator(posts_queryset, POSTS_PER_PAGE)
+    try:
+        if page := request.GET.get("page"):
+            page_obj = posts_paginator.page(page)
+        else:
+            page_obj = posts_paginator.page(1)
+    except EmptyPage:
+        page_obj = posts_paginator.page(1)
+
     no_posts_message = "No posts written yet."
+
     return render(
         request,
         "blog/index.html",
-        {"page": "Blog", "posts": posts, "no_posts_message": no_posts_message},
+        {"page": "Blog", "page_obj": page_obj, "no_posts_message": no_posts_message},
     )
 
 
 @user_passes_test(lambda user: user.is_authenticated)
 def favourites(request):
-    posts = [
+    posts_queryset = [
         post
         for post in Post.objects.all()
         if Favourite.objects.filter(user=request.user, post=post.id).count() > 0
     ]
     no_posts_message = "No favourites added yet."
+
+    posts_paginator = Paginator(posts_queryset, POSTS_PER_PAGE)
+    try:
+        if page := request.GET.get("page"):
+            page_obj = posts_paginator.page(page)
+        else:
+            page_obj = posts_paginator.page(1)
+    except EmptyPage:
+        page_obj = posts_paginator.page(1)
+
     return render(
         request,
         "blog/index.html",
-        {"page": "Favourites", "no_posts_message": no_posts_message, "posts": posts},
+        {
+            "page": "Favourites",
+            "no_posts_message": no_posts_message,
+            "page_obj": page_obj,
+        },
     )
 
 
@@ -57,11 +84,25 @@ def search(request):
 
             posts = posts.exclude(id__in=posts_to_exclude)
 
-        no_posts_message = "No post found."
+        posts_paginator = Paginator(posts, POSTS_PER_PAGE)
+
+        try:
+            if page := request.GET.get("page"):
+                page_obj = posts_paginator.page(page)
+            else:
+                page_obj = posts_paginator.page(1)
+        except EmptyPage:
+            page_obj = posts_paginator.page(1)
+
+        no_posts_message = "No posts found."
         return render(
             request,
             "blog/index.html",
-            {"page": "Posts", "posts": posts, "no_posts_message": no_posts_message},
+            {
+                "page": "Posts",
+                "page_obj": page_obj,
+                "no_posts_message": no_posts_message,
+            },
         )
     else:
         categories = Category.objects.all()
@@ -80,12 +121,22 @@ def categories(request):
             posts = Post.objects.filter(category=category)
             cat_name = Category.objects.get(id=category).name
             no_posts_message = f"No posts in the {cat_name} category yet."
+
+            posts_paginator = Paginator(posts, POSTS_PER_PAGE)
+            try:
+                if page := request.GET.get("page"):
+                    page_obj = posts_paginator.page(page)
+                else:
+                    page_obj = posts_paginator.page(1)
+            except EmptyPage:
+                page_obj = posts_paginator.page(1)
+
             return render(
                 request,
                 "blog/index.html",
                 {
                     "page": cat_name,
-                    "posts": posts,
+                    "page_obj": page_obj,
                     "no_posts_message": no_posts_message,
                 },
             )
@@ -99,10 +150,25 @@ def categories(request):
 def myposts(request):
     posts = Post.objects.filter(user=request.user.id).order_by("-date")
     no_posts_message = "No posts written yet."
+
+    posts_paginator = Paginator(posts, POSTS_PER_PAGE)
+
+    try:
+        if page := request.GET.get("page"):
+            page_obj = posts_paginator.page(page)
+        else:
+            page_obj = posts_paginator.page(1)
+    except EmptyPage:
+        page_obj = posts_paginator.page(1)
+
     return render(
         request,
         "blog/index.html",
-        {"page": "My Posts", "posts": posts, "no_posts_message": no_posts_message},
+        {
+            "page": "My Posts",
+            "page_obj": page_obj,
+            "no_posts_message": no_posts_message,
+        },
     )
 
 

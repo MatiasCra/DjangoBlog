@@ -1,21 +1,51 @@
 {% extends 'layout.html' %}
 {% load static %}
+
 {% block header %}
 <div class="bg-dark o-98 p-0 m-0">
     <h1 class="mb-5 mt-4 py-5 text-center text-white" style="font-size: 4rem;">{{ page }}</h1>
 </div>
 {% endblock header %}
 
-{% block content %}            
-    {% if not posts %}
+{% block content %}
+    {% if not page_obj.object_list %}
         <span class="text-center h6 d-block mt-3">
             {{ no_posts_message }}
         </span>
     {% else %}
         <div class="d-flex flex-row flex-wrap">
-            {% for post in posts %}
+            {% for post in page_obj %}
                 {% include 'blog/post_card.html' %}     
             {% endfor %}
         </div>
+        {% if page_obj.has_other_pages %}
+            <div id="paginationContainer" class="d-flex justify-content-center flex-column py-2">
+                <ul class="pagination justify-content-center align-items-center m-0">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a href="?page=1" class="page-link">&laquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.previous_page_number }}" class="page-link">
+                                {{ page_obj.number|add:"-1" }}
+                            </a>
+                        </li>
+                    {% endif %} 
+                    <li class="page-item active">
+                        <span class="page-link" style="cursor: default;">{{ page_obj.number }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.next_page_number }}" class="page-link">
+                                {{ page_obj.number|add:"+1" }}
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">&raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock content %}

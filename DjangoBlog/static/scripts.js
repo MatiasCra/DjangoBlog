@@ -264,7 +264,6 @@ if (commentBtn) {
     // Add all comment info to div
     commentContainer.appendChild(userContainer);
     commentContainer.appendChild(commentDiv);
-
     // Add comment to all comments div
     commentBlock = document.getElementById("commentsBlock");
     // If there where no comments, remove the 'no comments' stuff
@@ -284,5 +283,28 @@ if (commentBtn) {
       addComment(content);
     }
     commentInput.value = "";
+  });
+}
+
+// Keep search parameters when changing page on search results
+paginationDiv = document.getElementById("paginationContainer");
+if (paginationDiv) {
+  pageLinks = Array.from(paginationDiv.querySelectorAll("a"));
+  pageLinks.forEach((element) => {
+    previousSearch = window.location.search;
+    // Replace thr '?' of the previous search part of the url with an '&'
+    // and get rid of previus page parameter
+    cleanedSearch = previousSearch
+      .slice(1, previousSearch.length)
+      .replace(/page=[1-9][0-9]*/, "");
+    
+    // If there were no params, I don't want to add an '&'
+    if (cleanedSearch) {
+      searchParams = "&" + cleanedSearch;
+    } else {
+      searchParams = "";
+    }
+
+    element.href += searchParams;
   });
 }
