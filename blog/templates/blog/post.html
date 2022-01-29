@@ -15,7 +15,7 @@
     {{ post.id|json_script:"postIdContext" }}
     <div class="d-flex flex-column flex-xl-row-reverse justify-content-between">
       {% if post.user.id == user.id %}
-        <div class="col-xl-auto col-12 d-flex flex-column">
+        <div class="col-xl-auto col-12 d-flex flex-column ms-lg-3">
           <a href="{% url 'Update' post.id %}" class="btn secondary-btn mb-1 d-block d-xl-inline w-100">
             Edit
           </a>
@@ -23,7 +23,7 @@
             Delete
           </a>
         </div>
-        <h2 class="col-xl-10 fit-content display-1 fw-normal">{{ post.title }}</h2>
+        <h2 class="col-xl-10 display-1 fw-normal">{{ post.title }}</h2>
       {% else %}
         <h2 class="w-100 fit-content display-1 fw-normal">{{ post.title }}</h2>
       {% endif %}

@@ -6,3 +6,5 @@ media/profiles/**.png
 media/profiles/**.jpg
 
 **.env
+
+.todo

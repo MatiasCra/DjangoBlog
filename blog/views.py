@@ -14,10 +14,11 @@ import json
 
 def index(request):
     posts = Post.objects.all().order_by("-date")
+    no_posts_message = "No posts written yet."
     return render(
         request,
         "blog/index.html",
-        {"page": "Blog", "posts": posts},
+        {"page": "Blog", "posts": posts, "no_posts_message": no_posts_message},
     )
 
 
@@ -77,10 +78,16 @@ def categories(request):
         category = request.GET.get("category")
         if category is not None:
             posts = Post.objects.filter(category=category)
+            cat_name = Category.objects.get(id=category).name
+            no_posts_message = f"No posts in the {cat_name} category yet."
             return render(
                 request,
                 "blog/index.html",
-                {"page": Category.objects.get(id=category), "posts": posts},
+                {
+                    "page": cat_name,
+                    "posts": posts,
+                    "no_posts_message": no_posts_message,
+                },
             )
 
     cats = Category.objects.all()
@@ -91,7 +98,12 @@ def categories(request):
 
 def myposts(request):
     posts = Post.objects.filter(user=request.user.id).order_by("-date")
-    return render(request, "blog/index.html", {"page": "My Posts", "posts": posts})
+    no_posts_message = "No posts written yet."
+    return render(
+        request,
+        "blog/index.html",
+        {"page": "My Posts", "posts": posts, "no_posts_message": no_posts_message},
+    )
 
 
 def delete_success(request):
