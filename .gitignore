@@ -5,6 +5,8 @@ media/images/**.jpg
 media/profiles/**.png
 media/profiles/**.jpg
 
+static/
+
 **.env
 
 .todo
