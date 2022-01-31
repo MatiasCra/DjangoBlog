@@ -6,43 +6,42 @@
 {% endblock header %}
 {% block content %}
     <div class="d-flex m-0 flex-column d-flex flex-column align-items-center">
-        {% if user.is_staff %}
-            <a class="btn btn-success align-self-end me-2 mb-2" 
-               style="width: max-content;"
-               href="{% url 'CreateCategory' %}">
-                Add category
-            </a>
-        {% endif %}
-        <div class="col card p-0 m-0 border-dark bg-light col-10">
-            <ul class="d-flex flex-column align-items-center text-center my-list p-0 m-0">
-                {% for cat in categories %}
-                    <li class="d-block py-2 w-100 cat-li border-bottom" style="position: relative;">
-                        <a href="{% url 'Categories' %}?category={{ cat.id }}" class="cat-link d-block">
-                            {{ cat }}
-                        </a>
-                        {% if user.is_staff %}
-                            <div class="h-100 d-flex flex-row" 
-                                style="position: absolute; right: 0; top: 0;">
-                                <a class="btn text-dark btn-outline-warning h-100 m-0"
-                                   style="border: 0;"
-                                   href="{% url 'EditCategory' cat.id %}">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a class="btn btn-outline-danger h-100 m-0"
-                                   style="border: 0;"
-                                   href="{% url 'DeleteCategory' cat.id %}">
-                                    <i class="bi bi-x"></i>
-                                </a>
-                            </div>
-                        {% endif %}
-                    </li>
-                {% endfor %}    
-            </ul>
-            
-            {% for cat in Category.objects.all %}
-                <span>{{cat}}</span>
-            {% endfor %}
-                   
+        <div class="col-11 col-lg-10">
+            {% if user.is_staff %}
+                <div class="w-100 d-flex">
+                    <a class="btn btn-success justify-self-end mb-2 ms-auto" 
+                    style="width: max-content;"
+                    href="{% url 'CreateCategory' %}">
+                        Add category
+                    </a>
+                </div>
+            {% endif %}
+            <div class="card card p-0 m-0 border-dark bg-light">
+                <ul class="d-flex flex-column align-items-center text-center my-list p-0 m-0">
+                    {% for cat in categories %}
+                        <li class="d-block py-2 w-100 cat-li border-bottom" style="position: relative;">
+                            <a href="{% url 'Categories' %}?category={{ cat.id }}" class="cat-link d-block">
+                                {{ cat }}
+                            </a>
+                            {% if user.is_staff %}
+                                <div class="h-100 d-flex flex-row" 
+                                    style="position: absolute; right: 0; top: 0;">
+                                    <a class="btn text-dark btn-outline-warning h-100 m-0"
+                                       style="border: 0;"
+                                       href="{% url 'EditCategory' cat.id %}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a class="btn btn-outline-danger h-100 m-0"
+                                       style="border: 0;"
+                                       href="{% url 'DeleteCategory' cat.id %}">
+                                        <i class="bi bi-x"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </li>
+                    {% endfor %}    
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock content %}
