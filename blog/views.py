@@ -12,7 +12,7 @@ from django.http import HttpResponse, HttpResponseNotModified
 import json
 from django.core.paginator import Paginator, EmptyPage
 
-POSTS_PER_PAGE = 12
+POSTS_PER_PAGE = 9
 
 
 def index(request):
