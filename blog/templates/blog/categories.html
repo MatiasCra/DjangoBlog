@@ -5,7 +5,7 @@
 </div>
 {% endblock header %}
 {% block content %}
-    <div class="row d-flex flex-column">
+    <div class="d-flex m-0 flex-column d-flex flex-column align-items-center">
         {% if user.is_staff %}
             <a class="btn btn-success align-self-end me-2 mb-2" 
                style="width: max-content;"
@@ -13,7 +13,7 @@
                 Add category
             </a>
         {% endif %}
-        <div class="col card p-0 mx-2 border-dark bg-light">
+        <div class="col card p-0 m-0 border-dark bg-light col-10">
             <ul class="d-flex flex-column align-items-center text-center my-list p-0 m-0">
                 {% for cat in categories %}
                     <li class="d-block py-2 w-100 cat-li border-bottom" style="position: relative;">
