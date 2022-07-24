@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -29,7 +30,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -151,12 +152,14 @@ CKEDITOR_CONFIGS = {
 }
 
 # Contact stuff
-CONTACT_EMAIL = 'cravchikm@gmail.com'
-ADMIN_EMAILS = ['cravchikm@gmail.com', ]
+CONTACT_EMAIL = "cravchikm@gmail.com"
+ADMIN_EMAILS = [
+    "cravchikm@gmail.com",
+]
 
 # Twilio SendGrid
-EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY')
+EMAIL_HOST_USER = "apikey"
+EMAIL_HOST_PASSWORD = os.environ.get("SENDGRID_API_KEY")
